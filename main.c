@@ -153,18 +153,23 @@ int main(){
 
         switch(wahl){
             case 1:
+                printf("\e[1;1H\e[2J");
                 //addStudent(inputStudent());
                 break;
             case 2:
+                printf("\e[1;1H\e[2J");
                 printf("Aktuelle Studenten Anzahl: %d\n", getStudentenListLength());
                 break;
             case 3:
+                printf("\e[1;1H\e[2J");
                 //printStudent();
                 break;
             case 4:
+                printf("\e[1;1H\e[2J");
                 //printAllStudents();
                 break;
             case 5:
+                printf("\e[1;1H\e[2J");
                 //deleteStudent();
                 break;
             case 6:
