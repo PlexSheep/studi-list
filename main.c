@@ -10,7 +10,7 @@ struct date {
 
 // Erstelle eine Studenten Struktur mit folgenden Inhalten: Nachname, Matrikelnummer, Start Datum, 
 // End Datum, geburstdatum
-struct student{
+typedef struct {
     int age;
     struct date birthday;
     char name[50];
@@ -18,13 +18,13 @@ struct student{
     int matriculationNumber;
     struct date startdate;
     struct date enddate;
-};
+}student;
 
 // make a global var to store all of our students. This is a pointer because we want to use malloc()
 int studentListLength = 0;
 
 typedef struct node {
-    struct student* student;
+    student* student;
     struct node* next;
     struct node* last;
 }node;
@@ -32,9 +32,9 @@ typedef struct node {
 node* head = NULL;  // first node
 node* tail = NULL;  // last node
 
-struct student inputStudent(){
+student* inputStudent(){
     char tmpnum[50];
-    struct student s;
+    student s;
 
     printf("Geben sie ihr Alter ein:\n");
     fgets(tmpnum, 50, stdin);
@@ -92,9 +92,10 @@ struct student inputStudent(){
     s.enddate.month = date[1];
     s.enddate.year = date[2];;
 
-    return s;
+    return &s;
 }
 
+/*
 void addNode(node* n){
     if(studentListLength == 0){
         // no elements in list yet, create the first.
@@ -106,6 +107,7 @@ void addNode(node* n){
     }
     studentListLength++;
 }
+*/
 
 void delNode(node* n){
     n->last->next = n->next;
@@ -119,11 +121,21 @@ int getStudentenListLength(){
     return studentListLength;
 }
 
-void addStudent(struct student* s){
+void addStudent(student* s){ //FIXME Adresses in node wrong
     // TODO check if given student is already in the arr
+    node n;
+    n.student = s;
+    n.last = &n; //FIXME How to get last? 
+    n.next = NULL;
     if(studentListLength == 0){
         // no elements in list yet, create the first.
+        head = &n;
     }
+    else {
+        tail->next = NULL;
+        tail = &n;
+    }
+    studentListLength++;
 }
 
 // Schreibe eine funktion deleteStudent(matrikelnummer), welche einen Studenten loescht.
@@ -154,7 +166,7 @@ int main(){
         switch(wahl){
             case 1:
                 printf("\e[1;1H\e[2J");
-                //addStudent(inputStudent());
+                addStudent(inputStudent());
                 break;
             case 2:
                 printf("\e[1;1H\e[2J");
