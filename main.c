@@ -129,15 +129,16 @@ void addStudent(student* s){ //FIXME Adresses in node wrong
     // TODO check if given student is already in the arr
     node *n = (struct node*) malloc(sizeof(struct node));
     n -> student = s;
-    n -> last = n; //FIXME How to get last? 
-    n -> next = NULL;
+
     if(studentListLength == 0){
         // no elements in list yet, create the first.
         head = n;
+        head -> last = n;
+        //tail = n;
     }
     else {
-        tail = n;
-        tail -> next = NULL;   
+        head -> last -> next = n;
+        head -> last = n;  
     }
     studentListLength++;
 }
@@ -149,6 +150,15 @@ int deleteStudent(int mNum){
     // return 0 on success, 1 on fail
     return 0;
 }
+
+/*
+void printStudent(){
+    node *node = NULL;
+    while (*node == typeof(=)) {
+    
+    }
+}
+*/
 
 int main(){
     int ende =0;
@@ -200,5 +210,8 @@ int main(){
         getc(stdin);
     }while (ende!=1);
     printf("Auf Wiedersehen\n");
+
+    free(head);
+    free(tail);
     return 0;
 }
