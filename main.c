@@ -15,6 +15,15 @@ struct student{
     struct date enddate;
 };
 
+// make a global var to store all of our students. This is a pointer because we want to use malloc()
+struct student* studentArr;
+
+struct student inputStudent(){
+
+    struct student s;
+
+    return s;
+}
 
 int main(){
     return 0;
