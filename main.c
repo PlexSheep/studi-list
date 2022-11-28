@@ -153,19 +153,19 @@ int main(){
 
         switch(wahl){
             case 1:
-                addStudent();
+                //addStudent();
                 break;
             case 2:
-                anzahl();
+                //anzahl();
                 break;
             case 3:
-                printStudent();
+                //printStudent();
                 break;
             case 4:
-                printAllStudents();
+                //printAllStudents();
                 break;
             case 5:
-                deleteStudent();
+                //deleteStudent();
                 break;
             case 6:
                 ende=1;
@@ -175,6 +175,5 @@ int main(){
         }
     }while (ende!=1);
     printf("Auf Wiedersehen");
-    return 0;
     return 0;
 }
