@@ -171,9 +171,9 @@ int main(){
                 ende=1;
                 break;
             default:
-                printf("Bitte einen gueltigen Wert eingeben");
+                printf("Bitte einen gueltigen Wert eingeben\n");
         }
     }while (ende!=1);
-    printf("Auf Wiedersehen");
+    printf("Auf Wiedersehen\n");
     return 0;
 }
