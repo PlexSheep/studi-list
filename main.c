@@ -140,7 +140,7 @@ int main(){
 
     do{
         printf("\e[1;1H\e[2J");
-        printf("Bitte Wahl treffen: ");
+        printf("Bitte Wahl treffen:\n");
         printf("(1) Neuen Studenten anlegen\n");
         printf("(2) Anzahl der gespeicherten Studenten abrufen\n");
         printf("(3) Student anhand der Martikelnummer ausgeben\n");
@@ -153,7 +153,7 @@ int main(){
 
         switch(wahl){
             case 1:
-                //addStudent();
+                //addStudent(inputStudent());
                 break;
             case 2:
                 //anzahl();
