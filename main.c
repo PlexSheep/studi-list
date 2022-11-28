@@ -6,7 +6,7 @@ struct date {
     int year;
 };
 
-struct Studenteninfo{
+struct student{
     int age;
     struct date birthday;
     char name[40];
@@ -14,6 +14,7 @@ struct Studenteninfo{
     struct date startdate;
     struct date enddate;
 };
+
 
 int main(){
     return 0;
