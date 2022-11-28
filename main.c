@@ -11,7 +11,6 @@ struct date {
 // Erstelle eine Studenten Struktur mit folgenden Inhalten: Nachname, Matrikelnummer, Start Datum, 
 // End Datum, geburstdatum
 struct student{
-    int* next;
     int age;
     struct date birthday;
     char name[50];
@@ -22,13 +21,16 @@ struct student{
 };
 
 // make a global var to store all of our students. This is a pointer because we want to use malloc()
-struct student* studentArr;
-int studentArrLength = 0;
+int studentListLength = 0;
 
 typedef struct node {
-    struct student student;
+    struct student* student;
     struct node* next;
+    struct node* last;
 }node;
+
+node* head = NULL;  // first node
+node* tail = NULL;  // last node
 
 struct student inputStudent(){
     char tmpnum[50];
@@ -93,25 +95,41 @@ struct student inputStudent(){
     return s;
 }
 
-void addStudent(struct student* s){
-    // TODO check if given student is already in the arr
-   studentArr[studentArrLength++ + 1] = *s;
-   int a = s->age;
+void addNode(node* n){
+    if(studentListLength == 0){
+        // no elements in list yet, create the first.
+        head = n;
+    }
+    else {
+        tail->next = n;
+        tail = n;
+    }
+    studentListLength++;
+}
+
+void delNode(node* n){
+    n->last->next = n->next;
+    // TODO does free() work for our structs?
+    free(n);
+    studentListLength--;
 }
 
 // Schreibe eine Funktion in der die Anzahl der gespeicherten Studenten zurueck gegeben werden soll.
-int getStudentenArrLength(){
-    return studentArrLength;
+int getStudentenListLength(){
+    return studentListLength;
+}
+
+void addStudent(struct student* s){
+    // TODO check if given student is already in the arr
+    if(studentListLength == 0){
+        // no elements in list yet, create the first.
+    }
 }
 
 // Schreibe eine funktion deleteStudent(matrikelnummer), welche einen Studenten loescht.
 // TODO rewrite with nodes
 int deleteStudent(int mNum){
-    for(int i = 0; i < getStudentenArrLength(); i++){
-        if(mNum == studentArr[i].matriculationNumber)
-            // delete that one
-
-    }
+    // TODO iterate nodes, delete node with mNum matching argument
     // return 0 on success, 1 on fail
     return 0;
 }
