@@ -1,6 +1,9 @@
 # studi-list
 This is the repository for the final task of the first semester of programming in C at DHBW Mannheim.
 
+# Compiling
+Just compile it using 'make', a Makefile is included.
+
 ## Task (german)
 Finale Aufgabe
 
