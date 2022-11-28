@@ -52,5 +52,5 @@ Mkfile.old
 dkms.conf
 
 # project specific
-obj
-bin
+obj/
+bin/
