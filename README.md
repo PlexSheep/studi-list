@@ -9,7 +9,7 @@ Das Programm soll eine Liste von Studenten verarbeiten
 
 - Erstelle eine Studenten Struktur mit folgenden Inhalten: Nachname, Matrikelnummer, Start Datum, End Datum, geburstdatum
 
-- Erstelle eine Datums Struktur (day month year) fuer das gebursdatum und einschreibungsdatum etc.
+X - Erstelle eine Datums Struktur (day month year) fuer das gebursdatum und einschreibungsdatum etc.
 
 - Schreibe eine Funktion inputStudent: Bei dem der Benutzer alle relevanten Daten zu einem Studenten eingeben kann.
 
