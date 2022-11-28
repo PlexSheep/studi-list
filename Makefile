@@ -11,4 +11,4 @@ clean:
 		rm -rvf bin obj
 
 bin/studentList:
-		gcc main.c -g -o bin/studentList
+		@${CC} main.c -g -o bin/studentList -lm
