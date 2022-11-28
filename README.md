@@ -13,9 +13,9 @@ Das Programm soll eine Liste von Studenten verarbeiten
 
 - Schreibe eine Funktion inputStudent: Bei dem der Benutzer alle relevanten Daten zu einem Studenten eingeben kann.
 
-- Schreibe eine Funktion addStudent: bei der ein Student hinzugefügt wird.
+- [X] Schreibe eine Funktion addStudent: bei der ein Student hinzugefügt wird.
 
-- Schreibe eine Funktion in der die Anzahl der gespeicherten Studenten zurueck gegeben werden soll.
+- [X] Schreibe eine Funktion in der die Anzahl der gespeicherten Studenten zurueck gegeben werden soll.
 
 - Schreibe eine Funktion printStudent(Matrikelnummer), mit der ein Student auf dem Bildschirm ausgegeben werden soll
 

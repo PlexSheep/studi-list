@@ -6,6 +6,8 @@ struct date {
     int year;
 };
 
+// Erstelle eine Studenten Struktur mit folgenden Inhalten: Nachname, Matrikelnummer, Start Datum, 
+// End Datum, geburstdatum
 struct student{
     int age;
     struct date birthday;
@@ -29,6 +31,11 @@ struct student inputStudent(){
 void addStudent(struct student* s){
     // TODO check if given student is already in the arr
    studentArr[studentArrLength++ + 1] = *s;
+}
+
+// Schreibe eine Funktion in der die Anzahl der gespeicherten Studenten zurueck gegeben werden soll.
+int getStudentenArrLength(){
+    return studentArrLength;
 }
 
 int main(){
