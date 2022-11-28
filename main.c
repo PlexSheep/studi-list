@@ -37,9 +37,11 @@ student* inputStudent(){
     student *s = (student*) malloc(sizeof(student));
 
     if(s == NULL){
+        printf("Could not allocate Memory for new student.");
         exit(EXIT_FAILURE);
     }
 
+    // TODO add validations for user input.
     printf("Geben sie ihr Alter ein:\n");
     fgets(tmpnum, 50, stdin);
     s -> age = atoi(tmpnum);
@@ -48,6 +50,7 @@ student* inputStudent(){
     fgets(tmpnum, 50, stdin);
     s -> matriculationNumber = atoi(tmpnum);
     
+    // FIXME produces segfault if user input is formatted wrongly
     printf("Geben sie ihr Geburtsdatum ein:\n");
     fgets(tmpnum, 50, stdin);
     int date[3];
@@ -68,6 +71,7 @@ student* inputStudent(){
     printf("Geben sie ihren Nachnamen ein:\n");
     fgets(s -> surname, 50, stdin);
     
+    // FIXME produces segfault if user input is formatted wrongly
     printf("Geben sie ihr vorraussichtliches Startdatum ein\n");
     fgets(tmpnum, 50, stdin);
     
@@ -82,6 +86,7 @@ student* inputStudent(){
     s -> startdate.month = date[1];
     s -> startdate.year = date[2];;
 
+    // FIXME produces segfault if user input is formatted wrongly
     printf("Geben sie ihr vorraussichtliches Abschlussdatum ein\n");
     fgets(tmpnum, 50, stdin);
     
