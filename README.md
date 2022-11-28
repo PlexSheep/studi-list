@@ -2,7 +2,7 @@
 This is the repository for the final task of the first semester of programming in C at DHBW Mannheim.
 
 # Compiling
-Just compile it using `make`, a Makefile is included. You can remove the compiled stuff using 
+Just compile it using `make`, a Makefile is included. You can remove the compiled stuff using `make clean`.
 
 ## Task (german)
 Finale Aufgabe
