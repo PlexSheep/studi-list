@@ -34,15 +34,19 @@ node* tail = NULL;  // last node
 
 student* inputStudent(){
     char tmpnum[50];
-    student s;
+    student *s = (student*) malloc(sizeof(student));
+
+    if(s == NULL){
+        exit(EXIT_FAILURE);
+    }
 
     printf("Geben sie ihr Alter ein:\n");
     fgets(tmpnum, 50, stdin);
-    s.age = atoi(tmpnum);
+    s -> age = atoi(tmpnum);
 
     printf("Geben sie ihre Matrikelnummer ein\n");
     fgets(tmpnum, 50, stdin);
-    s.matriculationNumber = atoi(tmpnum);
+    s -> matriculationNumber = atoi(tmpnum);
     
     printf("Geben sie ihr Geburtsdatum ein:\n");
     fgets(tmpnum, 50, stdin);
@@ -54,15 +58,15 @@ student* inputStudent(){
         }
         date[i] = atoi(strtok(NULL, "."));
     }   
-    s.birthday.day = date[0];
-    s.birthday.month = date[1];
-    s.birthday.year = date[2];;
+    s -> birthday.day = date[0];
+    s -> birthday.month = date[1];
+    s -> birthday.year = date[2];;
 
     printf("Geben sie ihren Vornamen ein:\n");
-    fgets(s.name, 50, stdin);
+    fgets(s -> name, 50, stdin);
 
     printf("Geben sie ihren Nachnamen ein:\n");
-    fgets(s.surname, 50, stdin);
+    fgets(s -> surname, 50, stdin);
     
     printf("Geben sie ihr vorraussichtliches Startdatum ein\n");
     fgets(tmpnum, 50, stdin);
@@ -74,9 +78,9 @@ student* inputStudent(){
         }
         date[i] = atoi(strtok(NULL, "."));
     }   
-    s.startdate.day = date[0];
-    s.startdate.month = date[1];
-    s.startdate.year = date[2];;
+    s -> startdate.day = date[0];
+    s -> startdate.month = date[1];
+    s -> startdate.year = date[2];;
 
     printf("Geben sie ihr vorraussichtliches Abschlussdatum ein\n");
     fgets(tmpnum, 50, stdin);
@@ -88,11 +92,11 @@ student* inputStudent(){
         }
         date[i] = atoi(strtok(NULL, "."));
     }   
-    s.enddate.day = date[0];
-    s.enddate.month = date[1];
-    s.enddate.year = date[2];;
+    s -> enddate.day = date[0];
+    s -> enddate.month = date[1];
+    s -> enddate.year = date[2];;
 
-    return &s;
+    return s;
 }
 
 /*
@@ -123,17 +127,17 @@ int getStudentenListLength(){
 
 void addStudent(student* s){ //FIXME Adresses in node wrong
     // TODO check if given student is already in the arr
-    node n;
-    n.student = s;
-    n.last = &n; //FIXME How to get last? 
-    n.next = NULL;
+    node *n = (struct node*) malloc(sizeof(struct node));
+    n -> student = s;
+    n -> last = n; //FIXME How to get last? 
+    n -> next = NULL;
     if(studentListLength == 0){
         // no elements in list yet, create the first.
-        head = &n;
+        head = n;
     }
     else {
-        tail->next = NULL;
-        tail = &n;
+        tail = n;
+        tail -> next = NULL;   
     }
     studentListLength++;
 }
