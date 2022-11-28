@@ -156,7 +156,7 @@ int main(){
                 //addStudent(inputStudent());
                 break;
             case 2:
-                //anzahl();
+                printf("Aktuelle Studenten Anzahl: %d\n", getStudentenListLength());
                 break;
             case 3:
                 //printStudent();
@@ -173,6 +173,10 @@ int main(){
             default:
                 printf("Bitte einen gueltigen Wert eingeben\n");
         }
+        // FIXME it would be good practice to use the same input function for all inputs
+        //char buf[1];
+        //fgets(buf , 1, stdin);
+        getc(stdin);
     }while (ende!=1);
     printf("Auf Wiedersehen\n");
     return 0;
