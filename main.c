@@ -138,15 +138,15 @@ int main(){
     int ende =0;
     int wahl;
 
-    printf("(1) Neuen Studenten anlegen\n");
-    printf("(2) Anzahl der gespeicherten Studenten abrufen\n");
-    printf("(3) Student anhand der Martikelnummer ausgeben\n");
-    printf("(4) Alle Studenten alphabetisch ausgeben\n");
-    printf("(5) Studenten loeschen\n");
-    printf("(6) Programm beenden\n");
-
     do{
+        printf("\e[1;1H\e[2J");
         printf("Bitte Wahl treffen: ");
+        printf("(1) Neuen Studenten anlegen\n");
+        printf("(2) Anzahl der gespeicherten Studenten abrufen\n");
+        printf("(3) Student anhand der Martikelnummer ausgeben\n");
+        printf("(4) Alle Studenten alphabetisch ausgeben\n");
+        printf("(5) Studenten loeschen\n");
+        printf("(6) Programm beenden\n");
         char tmpnum[50];
         fgets(tmpnum, 50, stdin);
         wahl = atoi(tmpnum);
