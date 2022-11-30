@@ -134,11 +134,13 @@ void addStudent(student* s){ //FIXME Adresses in node wrong
         // no elements in list yet, create the first.
         head = n;
         head -> last = n;
-        //tail = n;
+        tail = n;
     }
     else {
+        n -> next = NULL;
         head -> last -> next = n;
-        head -> last = n;  
+        head -> last = n;
+        tail = n;  
     }
     studentListLength++;
 }
@@ -151,14 +153,46 @@ int deleteStudent(int mNum){
     return 0;
 }
 
-/*
-void printStudent(){
-    node *node = NULL;
-    while (*node == typeof(=)) {
-    
+int recursiveDestroy(node *del){
+    /*
+    printf("%x\n", head);
+    printf("%x\n", tail);
+    printf("%x\n", head -> last);
+    */
+    if(del == tail){
+        //printf("Deleted until head\n"); //DEBUG:
+        free(del -> student);
+        free(del);
     }
+    else {
+        recursiveDestroy(del -> next);
+        free(del -> student);
+        free(del);
+    }
+    return 0;
 }
-*/
+
+void printAllStudents(){
+    if(studentListLength > 0){
+        node *inode = head;
+        for (int i = 0; i < studentListLength; i++){
+            printf("Name: %s", inode -> student -> name);
+            printf("Surname: %s", inode -> student -> surname);
+            printf("Age: %d\n", inode -> student -> age);
+            printf("Mnumber: %d\n", inode -> student -> matriculationNumber);
+            printf("Bithdate: %d.", inode -> student -> birthday.day);
+            printf("%d.", inode -> student -> birthday.month);
+            printf("%d\n", inode -> student -> birthday.year);
+            inode = inode -> next;
+        }
+    }
+    /*
+    else if (studentListLength == 1) {
+        printf("%d", head -> student -> age);
+    }
+    */
+}
+
 
 int main(){
     int ende =0;
@@ -192,13 +226,15 @@ int main(){
                 break;
             case 4:
                 printf("\e[1;1H\e[2J");
-                //printAllStudents();
+                printAllStudents();
                 break;
             case 5:
                 printf("\e[1;1H\e[2J");
                 //deleteStudent();
                 break;
             case 6:
+                recursiveDestroy(head);
+                printf("%x", head);
                 ende=1;
                 break;
             default:
@@ -210,8 +246,5 @@ int main(){
         getc(stdin);
     }while (ende!=1);
     printf("Auf Wiedersehen\n");
-
-    free(head);
-    free(tail);
     return 0;
 }
