@@ -142,6 +142,8 @@ void addStudent(student* s){ //FIXME Adresses in node wrong
         tail = n;
     }
     else {
+        // FIXME is this a good idea? might cause trouble when looping to find stuff
+        // This seems like hacky and bad code.
         n -> next = NULL;
         head -> last -> next = n;
         head -> last = n;
