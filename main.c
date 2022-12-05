@@ -223,10 +223,65 @@ void printAllStudents(){
     */
 }
 
+int readCSVIntoMemory(){
+
+    FILE* stream = fopen("student.csv", "r");
+
+    char* line = malloc(sizeof(char)*1024);
+    while (fgets(line, 1024, stream))
+    {
+        /* get year */
+        line=strtok(line,",");
+        printf("%s\n",line);
+        /* get month */
+        line=strtok(NULL,",");
+        printf("%s\n",line);
+        /* get day */
+        line=strtok(NULL,",");
+        printf("%s\n",line);
+        /*
+        line=strtok(NULL,",");
+        printf("%s\n",line);
+        line=strtok(NULL,",");
+        printf("%s\n",line);
+        */
+    }
+
+    free(line);
+
+    return 0;
+}
+
+void printStudent(int Martik){
+    student *inode = head;
+    int fund=0;
+    if(studentListLength > 0 && inode != NULL){
+        for(int i=0;i<studentListLength;i++){
+            if(Martik == inode ->matriculationNumber){
+                printf("Name: %s", inode -> name);
+                printf("Surname: %s", inode -> surname);
+                printf("Age: %d\n", inode -> age);
+                printf("Mnumber: %d\n", inode -> matriculationNumber);
+                printf("Bithdate: %d.", inode -> birthday.day);
+                printf("%d.", inode -> birthday.month);
+                printf("%d\n", inode -> birthday.year);
+                fund=1;
+            }
+        }
+        if(fund==0){
+            printf("Unter dieser Martikulartionsnummer ist kein Student gespeichert.");
+        }
+    }
+}
 
 int main(){
     int ende =0;
     int wahl;
+
+    // read all students from student.csv
+    //readCSVIntoMemory();
+    // FIXME DEBUG PAUSING
+    getc(stdin);
 
     do{
         printf("\e[1;1H\e[2J");
@@ -252,7 +307,9 @@ int main(){
                 break;
             case 3:
                 printf("\e[1;1H\e[2J");
-                //printStudent();
+                printf("Matrikulationsnummer eingeben:\n");
+                fgets(tmpnum, 50, stdin);
+                printStudent(atoi(tmpnum));
                 break;
             case 4:
                 printf("\e[1;1H\e[2J");
