@@ -228,23 +228,54 @@ int readCSVIntoMemory(){
     FILE* stream = fopen("student.csv", "r");
 
     char* line = malloc(sizeof(char)*1024);
+    if(line==NULL){
+        printf("Could not get memory!\n");
+        exit(EXIT_FAILURE);
+    }
     while (fgets(line, 1024, stream))
     {
-        /* get year */
-        line=strtok(line,",");
-        printf("%s\n",line);
-        /* get month */
-        line=strtok(NULL,",");
-        printf("%s\n",line);
-        /* get day */
-        line=strtok(NULL,",");
-        printf("%s\n",line);
-        /*
-        line=strtok(NULL,",");
-        printf("%s\n",line);
-        line=strtok(NULL,",");
-        printf("%s\n",line);
-        */
+        char* buffer = malloc(sizeof(line));
+        student* s = malloc(sizeof(student));
+        int date[3];
+
+        // get age
+        buffer=strtok(line,",");
+        printf("%s\n",buffer);
+        s->age=atoi(buffer);
+
+        // get birthday
+        buffer=strtok(NULL,",");
+        printf("%s\n",buffer);
+        // TODO parse date
+
+        // get name
+        buffer=strtok(NULL,",");
+        printf("%s\n",buffer);
+        // TODO remove quotes
+
+        // get firstname
+        buffer=strtok(NULL,",");
+        printf("%s\n",buffer);
+        // TODO parse date
+
+        // get matriculationNumber
+        buffer=strtok(NULL,",");
+        printf("%s\n",buffer);
+        s->matriculationNumber = atoi(buffer);
+
+        // get startdate
+        buffer=strtok(NULL,",");
+        printf("%s\n",buffer);
+        // TODO parse date
+
+        // get enddate
+        buffer=strtok(NULL,",");
+        printf("%s\n",buffer);
+        // TODO parse date
+
+        free(buffer);
+        addStudent(s);
+        free(s);
     }
 
     free(line);
@@ -279,7 +310,7 @@ int main(){
     int wahl;
 
     // read all students from student.csv
-    //readCSVIntoMemory();
+    readCSVIntoMemory();
     // FIXME DEBUG PAUSING
     getc(stdin);
 
