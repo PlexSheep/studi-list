@@ -14,7 +14,7 @@ Das Programm soll eine Liste von Studenten verarbeiten
 
 - [X] Erstelle eine Datums Struktur (day month year) fuer das gebursdatum und einschreibungsdatum etc.
 
-- Schreibe eine Funktion inputStudent: Bei dem der Benutzer alle relevanten Daten zu einem Studenten eingeben kann.
+- [X] Schreibe eine Funktion inputStudent: Bei dem der Benutzer alle relevanten Daten zu einem Studenten eingeben kann.
 
 - [X] Schreibe eine Funktion addStudent: bei der ein Student hinzugefügt wird.
 
@@ -22,9 +22,9 @@ Das Programm soll eine Liste von Studenten verarbeiten
 
 - Schreibe eine Funktion printStudent(Matrikelnummer), mit der ein Student auf dem Bildschirm ausgegeben werden soll
 
-- Schreibe eine Funktion printAllStudents, mit der alle Studenten Alphabetisch auf dem Bildschirm ausgegeben werden sollen.
+- [X] Schreibe eine Funktion printAllStudents, mit der alle Studenten Alphabetisch auf dem Bildschirm ausgegeben werden sollen.
 
-- Schreibe eine Funktion menue, ueber die die Verschienen funktionen aufgerufen werden sollen.
+- [X] Schreibe eine Funktion menue, ueber die die Verschienen funktionen aufgerufen werden sollen.
 
 - Schreibe eine funktion deleteStudent(matrikelnummer), welche einen Studenten loescht.
 
