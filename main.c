@@ -10,7 +10,7 @@ struct date {
 
 // Erstelle eine Studenten Struktur mit folgenden Inhalten: Nachname, Matrikelnummer, Start Datum, 
 // End Datum, geburstdatum
-typedef struct {
+typedef struct student {
     int age;
     struct date birthday;
     char name[50];
@@ -18,6 +18,8 @@ typedef struct {
     int matriculationNumber;
     struct date startdate;
     struct date enddate;
+    struct student* next;
+    struct student* last;
 }student;
 
 // make a global var to store all of our students. This is a pointer because we want to use malloc()
@@ -29,8 +31,8 @@ typedef struct node {
     struct node* last;
 }node;
 
-node* head = NULL;  // first node
-node* tail = NULL;  // last node
+student* head = NULL;  // first node
+student* tail = NULL;  // last node
 
 student* inputStudent(){
     char tmpnum[50];
@@ -127,20 +129,20 @@ int getStudentenListLength(){
 
 void addStudent(student* s){ //FIXME Adresses in node wrong
     // TODO check if given student is already in the arr
-    node *n = (struct node*) malloc(sizeof(struct node));
-    n -> student = s;
+    //node *n = (struct node*) malloc(sizeof(struct node));
+    //n -> student = s;
 
     if(studentListLength == 0){
         // no elements in list yet, create the first.
-        head = n;
-        head -> last = n;
-        tail = n;
+        head = s;
+        head -> last = s;
+        tail = s;
     }
     else {
-        n -> next = NULL;
-        head -> last -> next = n;
-        head -> last = n;
-        tail = n;  
+        s -> next = NULL;
+        head -> last -> next = s;
+        head -> last = s;
+        tail = s;  
     }
     studentListLength++;
 }
@@ -153,7 +155,7 @@ int deleteStudent(int mNum){
     return 0;
 }
 
-int recursiveDestroy(node *del){
+int recursiveDestroy(student *del){
     /*
     printf("%x\n", head);
     printf("%x\n", tail);
@@ -161,28 +163,30 @@ int recursiveDestroy(node *del){
     */
     if(del == tail){
         //printf("Deleted until head\n"); //DEBUG:
-        free(del -> student);
         free(del);
+        del = NULL;
+        //free(del);
     }
     else {
         recursiveDestroy(del -> next);
-        free(del -> student);
+        //free(del -> student);
         free(del);
+        del = NULL;
     }
     return 0;
 }
 
 void printAllStudents(){
     if(studentListLength > 0){
-        node *inode = head;
+        student *inode = head;
         for (int i = 0; i < studentListLength; i++){
-            printf("Name: %s", inode -> student -> name);
-            printf("Surname: %s", inode -> student -> surname);
-            printf("Age: %d\n", inode -> student -> age);
-            printf("Mnumber: %d\n", inode -> student -> matriculationNumber);
-            printf("Bithdate: %d.", inode -> student -> birthday.day);
-            printf("%d.", inode -> student -> birthday.month);
-            printf("%d\n", inode -> student -> birthday.year);
+            printf("Name: %s", inode -> name);
+            printf("Surname: %s", inode -> surname);
+            printf("Age: %d\n", inode -> age);
+            printf("Mnumber: %d\n", inode -> matriculationNumber);
+            printf("Bithdate: %d.", inode -> birthday.day);
+            printf("%d.", inode -> birthday.month);
+            printf("%d\n", inode -> birthday.year);
             inode = inode -> next;
         }
     }
@@ -230,7 +234,7 @@ int main(){
                 break;
             case 5:
                 printf("\e[1;1H\e[2J");
-                //deleteStudent();
+                recursiveDestroy(head);
                 break;
             case 6:
                 recursiveDestroy(head);
