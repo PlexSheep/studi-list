@@ -35,9 +35,20 @@ student* head = NULL;  // first node
 student* tail = NULL;  // last node
 
 student* inputStudent(){
+    /*
+    ########################################################################
+    # input method for the students                                        #
+    # reads strings from stdin and retruns a student struct                #
+    ########################################################################
+    */
+
+    // tmpnum array to use fgets as as safe input function. Later converted to number formats
     char tmpnum[50];
+
+    // Create student struct and allocate memory
     student *s = (student*) malloc(sizeof(student));
 
+    //Check if student struct has been assigned a memory region
     if(s == NULL){
         exit(EXIT_FAILURE);
     }
@@ -53,6 +64,8 @@ student* inputStudent(){
     printf("Geben sie ihr Geburtsdatum ein:\n");
     fgets(tmpnum, 50, stdin);
     int date[3];
+
+    // Code to split string that contains '.' characters (dates)
     date[0] = atoi(strtok(tmpnum, "."));
     for(int i = 1; i < 3; i++){
         if(tmpnum[i] == ' '){
@@ -73,6 +86,7 @@ student* inputStudent(){
     printf("Geben sie ihr vorraussichtliches Startdatum ein\n");
     fgets(tmpnum, 50, stdin);
     
+    // Code to split string that contains '.' characters (dates)
     date[0] = atoi(strtok(tmpnum, "."));
     for(int i = 1; i < 3; i++){
         if(tmpnum[i] == ' '){
@@ -115,22 +129,25 @@ void addNode(node* n){
 }
 */
 
+/*
 void delNode(node* n){
     n->last->next = n->next;
     // TODO does free() work for our structs?
     free(n);
     studentListLength--;
 }
-
+*/
 // Schreibe eine Funktion in der die Anzahl der gespeicherten Studenten zurueck gegeben werden soll.
 int getStudentenListLength(){
     return studentListLength;
 }
 
-void addStudent(student* s){ //FIXME Adresses in node wrong
-    // TODO check if given student is already in the arr
-    //node *n = (struct node*) malloc(sizeof(struct node));
-    //n -> student = s;
+void addStudent(student* s){ 
+    /*
+    ########################################################################
+    # Method to add a student to the linked list                           #
+    ########################################################################
+    */
 
     if(studentListLength == 0){
         // no elements in list yet, create the first.
@@ -152,15 +169,23 @@ void addStudent(student* s){ //FIXME Adresses in node wrong
 // Schreibe eine funktion deleteStudent(matrikelnummer), welche einen Studenten loescht.
 // TODO rewrite with nodes
 int deleteStudent(int mNum){
-    // TODO iterate nodes, delete node with mNum matching argument
-    // return 0 on success, 1 on fail
+    /*
+    ########################################################################
+    # Method to delete students in by matriculation number                 #
+    ########################################################################
+    */
     student *inode = head;
+
+    // If this case is true, it is either the last oronly element in the list and the method should terminate once it is freed
     if(inode == tail && inode -> matriculationNumber == mNum){
         free(head);
         head = NULL;
         studentListLength--;
         return 0;
     }
+
+    // If above condition is not met, below code walks through the list and checks for the matchning matriculation number.
+    // If match is found, code frees and NULL's the matche
     while(inode != tail){
         if(inode -> next -> matriculationNumber == mNum){
             free(inode -> next);
@@ -176,10 +201,12 @@ int deleteStudent(int mNum){
 
 int recursiveDestroy(student *del){
     /*
-    printf("%x\n", head);
-    printf("%x\n", tail);
-    printf("%x\n", head -> last);
+    ########################################################################
+    # Method to free the memory allocated in heap for the students         # 
+    # on programm exit                                                     #
+    ########################################################################
     */
+    // Only execute if head was not already deleted or empty to begin with to avoid use after free
     if(del != NULL){
         if(del == tail){
             //printf("Deleted until head\n"); //DEBUG:
@@ -198,6 +225,11 @@ int recursiveDestroy(student *del){
 }
 
 void printAllStudents(){
+    /*
+    ########################################################################
+    # Method to print all students                                         # 
+    ########################################################################
+    */
     student *inode = head;
     if(studentListLength > 0 && inode != NULL){
         for (int i = 0; i < studentListLength; i++){
@@ -220,11 +252,17 @@ void printAllStudents(){
 
 
 int main(){
+    /*
+    ########################################################################
+    # The main method takes care of the menu and menu                      #
+    # user input functionality                                             #
+    ########################################################################
+    */
     int ende =0;
     int wahl;
 
     do{
-        printf("\e[1;1H\e[2J");
+        printf("\e[1;1H\e[2J"); // This is the ANSI escape sequence to clear the terminal and set coursor to start position. Used for fancy TUI
         printf("Bitte Wahl treffen:\n");
         printf("(1) Neuen Studenten anlegen\n");
         printf("(2) Anzahl der gespeicherten Studenten abrufen\n");
