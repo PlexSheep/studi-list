@@ -154,7 +154,24 @@ void addStudent(student* s){ //FIXME Adresses in node wrong
 int deleteStudent(int mNum){
     // TODO iterate nodes, delete node with mNum matching argument
     // return 0 on success, 1 on fail
-    return 0;
+    student *inode = head;
+    if(inode == tail && inode -> matriculationNumber == mNum){
+        free(head);
+        head = NULL;
+        studentListLength--;
+        return 0;
+    }
+    while(inode != tail){
+        if(inode -> next -> matriculationNumber == mNum){
+            free(inode -> next);
+            inode -> next = NULL;
+            inode -> next = inode -> next -> next;
+            studentListLength--;
+            return 0;
+        }
+        inode = inode -> next;
+    }
+    return 1;
 }
 
 int recursiveDestroy(student *del){
@@ -163,24 +180,26 @@ int recursiveDestroy(student *del){
     printf("%x\n", tail);
     printf("%x\n", head -> last);
     */
-    if(del == tail){
-        //printf("Deleted until head\n"); //DEBUG:
-        free(del);
-        del = NULL;
-        //free(del);
-    }
-    else {
-        recursiveDestroy(del -> next);
-        //free(del -> student);
-        free(del);
-        del = NULL;
+    if(del != NULL){
+        if(del == tail){
+            //printf("Deleted until head\n"); //DEBUG:
+            free(del);
+            del = NULL;
+            //free(del);
+        }
+        else {
+            recursiveDestroy(del -> next);
+            //free(del -> student);
+            free(del);
+            del = NULL;
+        }
     }
     return 0;
 }
 
 void printAllStudents(){
-    if(studentListLength > 0){
-        student *inode = head;
+    student *inode = head;
+    if(studentListLength > 0 && inode != NULL){
         for (int i = 0; i < studentListLength; i++){
             printf("Name: %s", inode -> name);
             printf("Surname: %s", inode -> surname);
@@ -236,7 +255,9 @@ int main(){
                 break;
             case 5:
                 printf("\e[1;1H\e[2J");
-                recursiveDestroy(head);
+                printf("Matrikulationsnummer eingeben");
+                fgets(tmpnum, 50, stdin);
+                deleteStudent(atoi(tmpnum));
                 break;
             case 6:
                 recursiveDestroy(head);
