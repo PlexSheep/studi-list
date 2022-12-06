@@ -223,6 +223,20 @@ void printAllStudents(){
     */
 }
 
+struct date* parseDate(char* cptr){
+    struct date* d = malloc(sizeof(struct date));
+    char* part[3];   // TODO check if this is enough if names are fully filled.
+
+    part[0] = strtok(cptr, ",");    // day
+    part[1] = strtok(NULL, ",");    // month
+    part[2] = strtok(NULL, ",");    // year
+
+    d->day = atoi(part[0]);
+    d->month = atoi(part[1]);
+    d->year = atoi(part[2]);
+
+    return d;
+}
 int readCSVIntoMemory(){
 
     FILE* stream = fopen("student.csv", "r");
@@ -234,71 +248,21 @@ int readCSVIntoMemory(){
     }
     while (fgets(line, 1024, stream))
     {
-        char* buffer = malloc(sizeof(line));
+        char* part[7];   // TODO check if this is enough if names are fully filled.
+        part[0] = strtok(line, ",");    // age
+        part[1] = strtok(NULL, ",");    // birthday
+        part[2] = strtok(NULL, ",");    // name
+        part[3] = strtok(NULL, ",");    // first name
+        part[4] = strtok(NULL, ",");
+        part[5] = strtok(NULL, ",");
+        part[6] = strtok(NULL, ",");
+        // Debug: print all segments
+        printf("%s|%s|%s|%s|%s|%s|%s\n", part[0], part[1], part[2], part[3], part[4], part[5], part[6]);
+
         student* s = malloc(sizeof(student));
-        int date[3];
+        s->age = atoi(part[0]);
 
-        // get age
-        buffer=strtok(line,",");
-        printf("%s\n",buffer);
-        // TDOO use sstrtol() instead as atoi doesnt raise errors.
-        s->age=atoi(buffer);
-
-        // get birthday
-        buffer=strtok(NULL,",");
-        printf("%s\n",buffer);
-        // TODO parse date
-        /* Buggy mess, segvaults when running
-        date[0] = atoi(strtok(buffer, "."));
-        for(int i = 1; i < 3; i++){
-            if(buffer[i] == ' '){
-                break;
-            }
-            //date[i] = atoi(strtok(NULL, "."));
-        }   
-        //s -> birthday.day = date[0];
-        //s -> birthday.month = date[1];
-        //s -> birthday.year = date[2];;
-        */
-        s -> birthday.day = 1;
-        s -> birthday.month = 1;
-        s -> birthday.year = 1;
-
-        // get name
-        buffer=strtok(NULL,",");
-        printf("%s\n",buffer);
-        // TODO remove quotes
-
-        // get firstname
-        buffer=strtok(NULL,",");
-        printf("%s\n",buffer);
-        // TODO parse date
-
-        // get matriculationNumber
-        buffer=strtok(NULL,",");
-        printf("%s\n",buffer);
-        s->matriculationNumber = atoi(buffer);
-
-        // get startdate
-        buffer=strtok(NULL,",");
-        printf("%s\n",buffer);
-        // TODO parse date
-        s -> startdate.day = 1;
-        s -> startdate.month = 1;
-        s -> startdate.year = 1;
-
-        // get enddate
-        buffer=strtok(NULL,",");
-        printf("%s\n",buffer);
-        // TODO parse date
-        s -> enddate.day = 1;
-        s -> enddate.month = 1;
-        s -> enddate.year = 1;
-
-        // FIXME SEGVAULT if we try to free buffer! THIS IS A MEMORY LEAK!!!
-        //free(buffer);
-        addStudent(s);
-        free(s);
+        // don't free s here, we will need it for as long as the process runs!
     }
 
     free(line);
