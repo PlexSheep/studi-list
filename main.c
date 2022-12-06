@@ -142,7 +142,7 @@ int getStudentenListLength(){
     return studentListLength;
 }
 
-void addStudent(student* s){ 
+int addStudent(student* s){ 
     /*
     ########################################################################
     # Method to add a student to the linked list                           #
@@ -153,18 +153,62 @@ void addStudent(student* s){
         // no elements in list yet, create the first.
         head = s;
         head -> last = s;
+        head -> next = NULL;
         tail = s;
+        tail -> next = NULL;
+        studentListLength++;
+        return 0;
     }
     else {
+        student *inode = head;
+        if(s -> surname[0] < head -> surname[0]){
+            s -> next = head;
+            head = s -> next;
+        }
         // FIXME is this a good idea? might cause trouble when looping to find stuff
         // This seems like hacky and bad code.
-        s -> next = NULL;
-        head -> last -> next = s;
-        head -> last = s;
-        tail = s;  
+        
+        while (inode -> next != NULL && s -> surname[0] > inode -> next -> surname[0]) {
+            //printf("%c", s -> surname[0]);
+            inode = inode -> next;
+        } 
+
+        s -> next = inode -> next;
+        inode -> next = s;
+
+        if(inode == tail){
+            tail = s;
+        }
+        
+        studentListLength++;
+        return 0;
     }
-    studentListLength++;
 }
+
+// Bogus Code
+/*
+        // FIXME is this a good idea? might cause trouble when looping to find stuff
+        // This seems like hacky and bad code.
+        student *inode = head;
+        while (inode -> next != NULL) {
+            printf("%c", s -> surname[0]);
+            if(s -> surname[0] > inode -> next -> surname[0] && s -> surname[0] < inode -> next -> next -> surname[0]){
+                student *tmpStud = inode -> next -> next; 
+                inode -> next = s;
+                s -> next = tmpStud;
+                return 0;
+            }
+            inode = inode -> next;
+        } 
+
+        // Case if stidentListLenght is equal to 1
+        head -> next = s;
+        s -> next = NULL;
+        tail = s;
+        studentListLength++;  
+        return 0;
+    }
+*/
 
 // Schreibe eine funktion deleteStudent(matrikelnummer), welche einen Studenten loescht.
 // TODO rewrite with nodes
@@ -186,17 +230,15 @@ int deleteStudent(int mNum){
 
     // If above condition is not met, below code walks through the list and checks for the matchning matriculation number.
     // If match is found, code frees and NULL's the matche
-    while(inode != tail){
-        if(inode -> next -> matriculationNumber == mNum){
-            free(inode -> next);
-            inode -> next = NULL;
-            inode -> next = inode -> next -> next;
-            studentListLength--;
-            return 0;
-        }
+    while(inode -> next -> matriculationNumber == mNum && inode != NULL){
         inode = inode -> next;
     }
-    return 1;
+    free(inode -> next);
+    inode -> next = NULL;
+    inode -> next = inode -> next -> next;
+    studentListLength--;
+    return 0;
+    
 }
 
 int recursiveDestroy(student *del){
