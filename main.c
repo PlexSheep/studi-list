@@ -147,7 +147,7 @@ void addStudent(student* s){ //FIXME Adresses in node wrong
         // FIXME is this a good idea? might cause trouble when looping to find stuff
         // This seems like hacky and bad code.
         s -> next = NULL;
-        head -> last -> next = s;
+        //head -> last -> next = s;
         head -> last = s;
         tail = s;  
     }
@@ -241,12 +241,28 @@ int readCSVIntoMemory(){
         // get age
         buffer=strtok(line,",");
         printf("%s\n",buffer);
+        // TDOO use sstrtol() instead as atoi doesnt raise errors.
         s->age=atoi(buffer);
 
         // get birthday
         buffer=strtok(NULL,",");
         printf("%s\n",buffer);
         // TODO parse date
+        /* Buggy mess, segvaults when running
+        date[0] = atoi(strtok(buffer, "."));
+        for(int i = 1; i < 3; i++){
+            if(buffer[i] == ' '){
+                break;
+            }
+            //date[i] = atoi(strtok(NULL, "."));
+        }   
+        //s -> birthday.day = date[0];
+        //s -> birthday.month = date[1];
+        //s -> birthday.year = date[2];;
+        */
+        s -> birthday.day = 1;
+        s -> birthday.month = 1;
+        s -> birthday.year = 1;
 
         // get name
         buffer=strtok(NULL,",");
@@ -267,13 +283,20 @@ int readCSVIntoMemory(){
         buffer=strtok(NULL,",");
         printf("%s\n",buffer);
         // TODO parse date
+        s -> startdate.day = 1;
+        s -> startdate.month = 1;
+        s -> startdate.year = 1;
 
         // get enddate
         buffer=strtok(NULL,",");
         printf("%s\n",buffer);
         // TODO parse date
+        s -> enddate.day = 1;
+        s -> enddate.month = 1;
+        s -> enddate.year = 1;
 
-        free(buffer);
+        // FIXME SEGVAULT if we try to free buffer! THIS IS A MEMORY LEAK!!!
+        //free(buffer);
         addStudent(s);
         free(s);
     }
@@ -310,6 +333,7 @@ int main(){
     int wahl;
 
     // read all students from student.csv
+    // is a buggy mess.
     readCSVIntoMemory();
     // FIXME DEBUG PAUSING
     getc(stdin);
@@ -354,7 +378,6 @@ int main(){
                 break;
             case 6:
                 recursiveDestroy(head);
-                printf("%x", head);
                 ende=1;
                 break;
             default:
