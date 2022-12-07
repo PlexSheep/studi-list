@@ -35,10 +35,13 @@ student* head = NULL;  // first node
 student* tail = NULL;  // last node
 
 struct date parseDate(char* cptr){
+    // TODO check if the given string is a proper date, maybe using scanf?
+    // return NULL if bad
     struct date d;
     struct date* dptr = &d;
     char* part[3];   // TODO check if this is enough if names are fully filled.
 
+    // TODO FIXME SEGFAULT WITH WRONG INPUT!
     part[0] = strtok(cptr, ".");    // day
     part[1] = strtok(NULL, ".");    // month
     part[2] = strtok(NULL, ".");    // year
@@ -115,22 +118,20 @@ int getStudentenListLength(){
 
 void addStudent(student* s){ //FIXME Adresses in node wrong
     // TODO check if given student is already in the arr
-    //node *n = (struct node*) malloc(sizeof(struct node));
-    //n -> student = s;
+    // (( FIXME this function is broken!!!!
 
     if(studentListLength == 0){
         // no elements in list yet, create the first.
         head = s;
-        head -> last = s;
+        head -> last = NULL;
+        head -> next = NULL;
         tail = s;
     }
     else {
-        // FIXME is this a good idea? might cause trouble when looping to find stuff
-        // This seems like hacky and bad code.
+        tail -> next = s;
+        s -> last = tail;
         s -> next = NULL;
-        //head -> last -> next = s;
-        head -> last = s;
-        tail = s;  
+        tail = s;
     }
     studentListLength++;
 }
@@ -196,9 +197,6 @@ void printAllStudents(){
             printf("Enddate: %d.%d.%d\n\n", s -> enddate.day, s -> enddate.month, s -> enddate.year);
             if(s->next != NULL)
                 s = s -> next;
-            else{
-                printf("This students next is NULL!!!!\n");
-            }
         }
     }
     /*
@@ -212,20 +210,21 @@ int readCSVIntoMemory(){
     FILE* stream = fopen("student.csv", "r");
     if(stream==NULL){
         printf("Could not open student.csv!\n");
-        exit(EXIT_FAILURE);
+        return 1;
     }
     char* line = malloc(sizeof(char)*1024);
     if(line==NULL){
         printf("Could not get memory!\n");
-        exit(EXIT_FAILURE);
+        return 1;
     }
     char* part[7];   // TODO check if this is enough if names are fully filled.
-    student* s = malloc(sizeof(student));
+    student* s;
     if(s==NULL){
         printf("Could not get memory!\n");
-        exit(EXIT_FAILURE);
+        return 1;
     }
     while (fgets(line, 1024, stream)){
+        s = malloc(sizeof(student));
         part[0] = strtok(line, ",");    // age
         part[1] = strtok(NULL, ",");    // birthday
         part[2] = strtok(NULL, ",");    // name
@@ -233,12 +232,12 @@ int readCSVIntoMemory(){
         part[4] = strtok(NULL, ",");    // matriculationNumber
         part[5] = strtok(NULL, ",");    // startdate
         part[6] = strtok(NULL, ",");    // enddate
-                                        // Debug: print all segments
+
+        // Debug: print all parts
         printf("%s|%s|%s|%s|%s|%s|%s", part[0], part[1], part[2], part[3], part[4], part[5], part[6]);
 
-        // TODO check if s is NULL
         s->age = atoi(part[0]);
-        s->birthday = parseDate(part[1]);   // SIGSEV
+        s->birthday = parseDate(part[1]);
         removeQuotes(part[2]);
         strcpy(s->name, part[2]);
         removeQuotes(part[3]);
@@ -247,20 +246,19 @@ int readCSVIntoMemory(){
         s->startdate = parseDate(part[5]);
         s->enddate = parseDate(part[6]);
 
-        printf("Name: %s\n", s -> name);
-        printf("Surname: %s\n", s -> surname);
-        printf("Age: %d\n", s -> age);
-        printf("Mnumber: %d\n", s -> matriculationNumber);
-        printf("Bithdate: %d.%d.%d\n", s -> birthday.day, s -> birthday.month, s -> birthday.year);
-        printf("Startdate: %d.%d.%d\n", s -> startdate.day, s -> startdate.month, s -> startdate.year);
-        printf("Enddate: %d.%d.%d\n\n", s -> enddate.day, s -> enddate.month, s -> enddate.year);
+        // printf("Name: %s\n", s -> name);
+        // printf("Surname: %s\n", s -> surname);
+        // printf("Age: %d\n", s -> age);
+        // printf("Mnumber: %d\n", s -> matriculationNumber);
+        // printf("Bithdate: %d.%d.%d\n", s -> birthday.day, s -> birthday.month, s -> birthday.year);
+        // printf("Startdate: %d.%d.%d\n", s -> startdate.day, s -> startdate.month, s -> startdate.year);
+        // printf("Enddate: %d.%d.%d\n\n", s -> enddate.day, s -> enddate.month, s -> enddate.year);
         // FIXME adding the done students doesn't work
         addStudent(s);
-
-        // don't free s here, we will need it for as long as the process runs!
     }
     fclose(stream);
     free(line);
+    // don't free s here, we will need it for as long as the process runs!
     return 0;
 }
 
@@ -287,6 +285,7 @@ void printStudent(int Martik){
 }
 
 void debugTests(){
+    // Test for removeQuotes(char*)
     const char cptrE[] = "TESTSTRINGTESTSTRINGTESTTESTSTRINGSTRING";
     printf("[DEBUG]Testing removeQuotes(char* cptr), output should be [%s].\n", cptrE);
     char cptr[] = "\"TESTSTRING\"\"TESTSTRING\"\"TEST\"TESTSTRING\"STRING\"";
@@ -294,17 +293,19 @@ void debugTests(){
     printf("[%s]\n", cptr);
     if(!strcmp(cptrE, cptr)) printf("SUCCESS!\n");
     else printf("FAILURE!\n");
+
+    // Your code goes here
 }
 
 int main(){
-    int ende =0;
+    int ende = 0;
     int wahl;
 
-    // read all students from student.csv
-    // is a buggy mess.
-    readCSVIntoMemory();
-    // FIXME DEBUG PAUSING
-    getc(stdin);
+    if(readCSVIntoMemory()){
+        // reading the file failed.
+        printf("Fatal error while reading from students.csv, exiting...\n");
+        exit(EXIT_FAILURE);
+    }
 
     do{
         printf("\e[1;1H\e[2J");
