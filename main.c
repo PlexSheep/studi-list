@@ -234,9 +234,6 @@ int recursiveDestroy(student *del){
     ########################################################################
     */
     // Only execute if head was not already deleted or empty to begin with to avoid use after free
-       printf("%x\n", head);
-       printf("%x\n", tail);
-       printf("%x\n", head -> last);
     if(del != NULL){
         if(del == tail){
             //printf("Deleted until head\n"); //DEBUG:
