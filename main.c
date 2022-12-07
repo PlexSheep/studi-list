@@ -240,8 +240,8 @@ struct date parseDate(char* cptr){
 }
 
 char* removeQuotes(char* cptr){
-    char* cptrN;    // TODO check if this works for full lenght char pointers!
-    cptrN = strtok(cptr, (const char*)'"');
+    char* cptrN = malloc(sizeof(cptr));    // TODO check if this works for full lenght char pointers!
+    strcpy(cptrN, cptr);
     return cptrN;
 }
 
@@ -256,6 +256,7 @@ int readCSVIntoMemory(){
     }
     while (fgets(line, 1024, stream))
     {
+        char* removedQuotesString;
         char* part[7];   // TODO check if this is enough if names are fully filled.
         part[0] = strtok(line, ",");    // age
         part[1] = strtok(NULL, ",");    // birthday
@@ -265,23 +266,32 @@ int readCSVIntoMemory(){
         part[5] = strtok(NULL, ",");    // startdate
         part[6] = strtok(NULL, ",");    // enddate
         // Debug: print all segments
-        printf("%s|%s|%s|%s|%s|%s|%s\n", part[0], part[1], part[2], part[3], part[4], part[5], part[6]);
+        printf("%s|%s|%s|%s|%s|%s|%s", part[0], part[1], part[2], part[3], part[4], part[5], part[6]);
 
-        char tmp[50] = "Wer das liest schreibt bugs in seinen code\n";
+        char tmp[50] = "Buggy read from file\n";
         student* s = malloc(sizeof(student));
         // TODO check if s is NULL
         s->age = atoi(part[0]);
         s->birthday = parseDate(part[1]);   // SIGSEV
-        // strcpy(s->name, removeQuotes(part[2]));
-        // strcpy(s->surname, removeQuotes(part[3]));
-        strcpy(s->name, tmp);
-        strcpy(s->surname, tmp);
+        removedQuotesString = removeQuotes(part[2]);
+        strcpy(s->name, removedQuotesString);
+        removedQuotesString = removeQuotes(part[3]);
+        strcpy(s->surname, removedQuotesString);
+        // strcpy(s->name, tmp);
+        // strcpy(s->surname, tmp);
         s->matriculationNumber = atoi(part[4]);
         s->startdate = parseDate(part[5]);
         s->enddate = parseDate(part[6]);
 
+        printf("Name: %s\n", s -> name);
+        printf("Surname: %s\n", s -> surname);
+        printf("Age: %d\n", s -> age);
+        printf("Mnumber: %d\n", s -> matriculationNumber);
+        printf("Bithdate: %d.%d.%d\n", s -> birthday.day, s -> birthday.month, s -> birthday.year);
+        printf("Startdate: %d.%d.%d\n", s -> startdate.day, s -> startdate.month, s -> startdate.year);
+        printf("Enddate: %d.%d.%d\n\n", s -> enddate.day, s -> enddate.month, s -> enddate.year);
         // FIXME adding the done students doesn't work
-        // addStudent(s);
+        addStudent(s);
 
         // don't free s here, we will need it for as long as the process runs!
     }
