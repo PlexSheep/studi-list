@@ -72,7 +72,6 @@ void removeQuotes(char* cptr){
 student* inputStudent(){
     char tmpnum[50];
     student *s = (student*) malloc(sizeof(student));
-
     if(s == NULL){
         printf("Could not allocate Memory for new student.");
         exit(EXIT_FAILURE);
@@ -86,24 +85,25 @@ student* inputStudent(){
     printf("Geben sie ihre Matrikelnummer ein\n");
     fgets(tmpnum, 50, stdin);
     s -> matriculationNumber = atoi(tmpnum);
-    
-    // FIXME produces segfault if user input is formatted wrongly
+
     printf("Geben sie ihr Geburtsdatum ein:\n");
     fgets(tmpnum, 50, stdin);
     s->birthday = parseDate(tmpnum);
 
     printf("Geben sie ihren Vornamen ein:\n");
     fgets(s -> name, 50, stdin);
+    // FIXME \n is stored here aswell, which fucks everything up
+    s->name[strcspn(s->name, "\n")] = 0;
 
     printf("Geben sie ihren Nachnamen ein:\n");
     fgets(s -> surname, 50, stdin);
-    
-    // FIXME produces segfault if user input is formatted wrongly
+    // FIXME \n is stored here aswell, which fucks everything up
+    s->surname[strcspn(s->surname, "\n")] = 0;
+
     printf("Geben sie ihr vorraussichtliches Startdatum ein\n");
     fgets(tmpnum, 50, stdin);
     s->startdate = parseDate(tmpnum);
 
-    // FIXME produces segfault if user input is formatted wrongly
     printf("Geben sie ihr vorraussichtliches Abschlussdatum ein\n");
     fgets(tmpnum, 50, stdin);
     s->enddate = parseDate(tmpnum);
@@ -117,8 +117,8 @@ int getStudentenListLength(){
 }
 
 void addStudent(student* s){ //FIXME Adresses in node wrong
-    // TODO check if given student is already in the arr
-    // (( FIXME this function is broken!!!!
+                             // TODO check if given student is already in the arr
+                             // (( FIXME this function is broken!!!!
 
     if(studentListLength == 0){
         // no elements in list yet, create the first.
@@ -163,10 +163,10 @@ int deleteStudent(int mNum){
 
 int recursiveDestroy(student *del){
     /*
-    printf("%x\n", head);
-    printf("%x\n", tail);
-    printf("%x\n", head -> last);
-    */
+       printf("%x\n", head);
+       printf("%x\n", tail);
+       printf("%x\n", head -> last);
+       */
     if(del != NULL){
         if(del == tail){
             //printf("Deleted until head\n"); //DEBUG:
@@ -201,17 +201,17 @@ void printAllStudents(){
         }
     }
     /*
-    else if (studentListLength == 1) {
-        printf("%d", head -> student -> age);
-    }
-    */
+       else if (studentListLength == 1) {
+       printf("%d", head -> student -> age);
+       }
+       */
 }
 
 int readCSV(){
     FILE* stream = fopen("student.csv", "r");
     if(stream==NULL){
         printf("Could not open student.csv!\n");
-        return 1;
+        return 2;
     }
     char* line = malloc(sizeof(char)*1024);
     if(line==NULL){
@@ -299,13 +299,26 @@ void debugTests(){
 }
 
 int saveCSV(){
-
+    if(studentListLength){
+        student* s = head;
+        FILE* fp = fopen("student.csv", "w");
+        if(fp==NULL){
+            return 1;
+        }
+        for(int i=0;i<studentListLength;i++){
+            fprintf(fp,"%d,%d.%d.%d,\"%s\",\"%s\",%d,%d.%d.%d,%d.%d.%d\n", s->age, s->birthday.day, s->birthday.month, s->birthday.year, s->name, s->surname, s->matriculationNumber, s->startdate.day, s->startdate.month, s->startdate.year, s->enddate.day, s->enddate.month, s->enddate.year);
+            if(s!=tail)
+                s = s->next;
+        }
+        fclose(fp);
+    }
     return 0;
 }
 
 int main(){
-    int ende = 0;
     int wahl;
+    char tmpnum[50];
+    int ret = 0;
 
     if(readCSV()){
         // reading the file failed.
@@ -323,7 +336,6 @@ int main(){
         printf("(5) Studenten loeschen\n");
         printf("(6) Programm beenden\n");
         printf("(7) Debug Testing\n");
-        char tmpnum[50];
         fgets(tmpnum, 50, stdin);
         wahl = atoi(tmpnum);
 
@@ -353,21 +365,27 @@ int main(){
                 deleteStudent(atoi(tmpnum));
                 break;
             case 6:
+                ret = saveCSV();
+                if(ret){
+                    printf("\e[1;1H\e[2J");
+                    printf("NICHT ALLE STUDENTEN KONNTEN IN DIE DATEI GESPEICHERT WERDEN!\nDAS PROGRAMM ENDET NICHT!\nGEBEN SIE 'F' EIN UM BEENDEN ZU ERZWINGEN: ");
+                    char c = getc(stdin);
+                    if(c != 'F')
+                        break;
+                }
                 recursiveDestroy(head);
-                ende=1;
-                break;
+                return ret;
             case 7:
                 printf("\e[1;1H\e[2J");
                 debugTests();
                 break;
             default:
                 printf("Bitte einen gueltigen Wert eingeben\n");
+                break;
         }
         // FIXME it would be good practice to use the same input function for all inputs
         //char buf[1];
         //fgets(buf , 1, stdin);
         getc(stdin);
-    }while (ende!=1);
-    printf("Auf Wiedersehen\n");
-    return 0;
+    }while(1);
 }
