@@ -20,7 +20,7 @@ Das Programm soll eine Liste von Studenten verarbeiten
 
 - [X] Schreibe eine Funktion in der die Anzahl der gespeicherten Studenten zurueck gegeben werden soll.
 
-- Schreibe eine Funktion printStudent(Matrikelnummer), mit der ein Student auf dem Bildschirm ausgegeben werden soll
+- [X] Schreibe eine Funktion printStudent(Matrikelnummer), mit der ein Student auf dem Bildschirm ausgegeben werden soll
 
 - [X] Schreibe eine Funktion printAllStudents, mit der alle Studenten Alphabetisch auf dem Bildschirm ausgegeben werden sollen.
 
@@ -32,7 +32,7 @@ Das Programm soll eine Liste von Studenten verarbeiten
 
 - [X] Schreibe eine Funktion read die eine Datei ausliest und alle Studenten daraus ins Programm laed. Diese Funktion soll beim start des Programms automatisch aufgerufen werden und soll somit nicht im menue auftauchen
 
-- Die Aufgabe soll mithilfe von Verketteten Listen gelöst werden.
+- [X] Die Aufgabe soll mithilfe von Verketteten Listen gelöst werden.
 
 Abzugebende Dokumente:
 
