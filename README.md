@@ -30,7 +30,7 @@ Das Programm soll eine Liste von Studenten verarbeiten
 
 - Schreibe eine Funktion save die Alle gespeicherten Studenten in eine Datei speichert. Diese Funktion soll beim beenden des Programms automatisch aufgerufen werden und soll somit nicht im menue auftauchen
 
-- Schreibe eine Funktion read die eine Datei ausliest und alle Studenten daraus ins Programm laed. Diese Funktion soll beim start des Programms automatisch aufgerufen werden und soll somit nicht im menue auftauchen
+- [X] Schreibe eine Funktion read die eine Datei ausliest und alle Studenten daraus ins Programm laed. Diese Funktion soll beim start des Programms automatisch aufgerufen werden und soll somit nicht im menue auftauchen
 
 - Die Aufgabe soll mithilfe von Verketteten Listen gelöst werden.
 
