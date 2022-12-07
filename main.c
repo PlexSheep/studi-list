@@ -133,9 +133,6 @@ int addStudent(student* s){
     # Method to add a student to the linked list                           #
     ########################################################################
     */
-void addStudent(student* s){ //FIXME Adresses in node wrong
-                             // TODO check if given student is already in the arr
-                             // (( FIXME this function is broken!!!!
 
     if(studentListLength == 0){
         // no elements in list yet, create the first.
@@ -240,7 +237,6 @@ int recursiveDestroy(student *del){
        printf("%x\n", head);
        printf("%x\n", tail);
        printf("%x\n", head -> last);
-       */
     if(del != NULL){
         if(del == tail){
             //printf("Deleted until head\n"); //DEBUG:
@@ -260,32 +256,33 @@ int recursiveDestroy(student *del){
 
 void printAllStudents(){
     /*
-    ########################################################################
-    # Method to print all students                                         # 
-    ########################################################################
-    */
+########################################################################
+# Method to print all students                                         # 
+########################################################################
+*/
     student *inode = head;
     if(studentListLength > 0 && inode != NULL){
-    student *s = head;
-    if(studentListLength > 0 && s != NULL){
-        for (int i = 0; i < studentListLength; i++){
-            printf("Name: %s\n", s -> name);
-            printf("Surname: %s\n", s -> surname);
-            printf("Age: %d\n", s -> age);
-            printf("Mnumber: %d\n", s -> matriculationNumber);
-            printf("Bithdate: %d.%d.%d\n", s -> birthday.day, s -> birthday.month, s -> birthday.year);
-            printf("Startdate: %d.%d.%d\n", s -> startdate.day, s -> startdate.month, s -> startdate.year);
-            printf("Enddate: %d.%d.%d\n", s -> enddate.day, s -> enddate.month, s -> enddate.year);
-            printf("------------------------------------\n");
-            if(s->next != NULL)
-                s = s -> next;
+        student *s = head;
+        if(studentListLength > 0 && s != NULL){
+            for (int i = 0; i < studentListLength; i++){
+                printf("Name: %s\n", s -> name);
+                printf("Surname: %s\n", s -> surname);
+                printf("Age: %d\n", s -> age);
+                printf("Mnumber: %d\n", s -> matriculationNumber);
+                printf("Bithdate: %d.%d.%d\n", s -> birthday.day, s -> birthday.month, s -> birthday.year);
+                printf("Startdate: %d.%d.%d\n", s -> startdate.day, s -> startdate.month, s -> startdate.year);
+                printf("Enddate: %d.%d.%d\n", s -> enddate.day, s -> enddate.month, s -> enddate.year);
+                printf("------------------------------------\n");
+                if(s->next != NULL)
+                    s = s -> next;
+            }
         }
+        /*
+           else if (studentListLength == 1) {
+           printf("%d", head -> student -> age);
+           }
+           */
     }
-    /*
-       else if (studentListLength == 1) {
-       printf("%d", head -> student -> age);
-       }
-       */
 }
 
 int readCSV(){
@@ -398,11 +395,11 @@ int saveCSV(){
 
 int main(){
     /*
-    ########################################################################
-    # The main method takes care of the menu and menu                      #
-    # user input functionality                                             #
-    ########################################################################
-    */
+########################################################################
+# The main method takes care of the menu and menu                      #
+# user input functionality                                             #
+########################################################################
+*/
     int wahl;
     char tmpnum[50];
     int ret = 0;
@@ -471,8 +468,6 @@ int main(){
                 break;
         }
         // FIXME it would be good practice to use the same input function for all inputs
-        //char buf[1];
-        //fgets(buf , 1, stdin);
         getc(stdin);
     }while(1);
 }
