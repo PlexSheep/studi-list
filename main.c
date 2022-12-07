@@ -223,20 +223,28 @@ void printAllStudents(){
     */
 }
 
-struct date* parseDate(char* cptr){
-    struct date* d = malloc(sizeof(struct date));
+struct date parseDate(char* cptr){
+    struct date d;
+    struct date* dptr = &d;
     char* part[3];   // TODO check if this is enough if names are fully filled.
 
-    part[0] = strtok(cptr, ",");    // day
-    part[1] = strtok(NULL, ",");    // month
-    part[2] = strtok(NULL, ",");    // year
+    part[0] = strtok(cptr, ".");    // day
+    part[1] = strtok(NULL, ".");    // month
+    part[2] = strtok(NULL, ".");    // year
 
-    d->day = atoi(part[0]);
-    d->month = atoi(part[1]);
-    d->year = atoi(part[2]);
+    dptr->day = atoi(part[0]);
+    dptr->month = atoi(part[1]);
+    dptr->year = atoi(part[2]);
 
     return d;
 }
+
+char* removeQuotes(char* cptr){
+    char* cptrN;    // TODO check if this works for full lenght char pointers!
+    cptrN = strtok(cptr, (const char*)'"');
+    return cptrN;
+}
+
 int readCSVIntoMemory(){
 
     FILE* stream = fopen("student.csv", "r");
@@ -252,21 +260,33 @@ int readCSVIntoMemory(){
         part[0] = strtok(line, ",");    // age
         part[1] = strtok(NULL, ",");    // birthday
         part[2] = strtok(NULL, ",");    // name
-        part[3] = strtok(NULL, ",");    // first name
-        part[4] = strtok(NULL, ",");
-        part[5] = strtok(NULL, ",");
-        part[6] = strtok(NULL, ",");
+        part[3] = strtok(NULL, ",");    // surname
+        part[4] = strtok(NULL, ",");    // matriculationNumber
+        part[5] = strtok(NULL, ",");    // startdate
+        part[6] = strtok(NULL, ",");    // enddate
         // Debug: print all segments
         printf("%s|%s|%s|%s|%s|%s|%s\n", part[0], part[1], part[2], part[3], part[4], part[5], part[6]);
 
+        char tmp[50] = "Wer das liest schreibt bugs in seinen code\n";
         student* s = malloc(sizeof(student));
+        // TODO check if s is NULL
         s->age = atoi(part[0]);
+        s->birthday = parseDate(part[1]);   // SIGSEV
+        // strcpy(s->name, removeQuotes(part[2]));
+        // strcpy(s->surname, removeQuotes(part[3]));
+        strcpy(s->name, tmp);
+        strcpy(s->surname, tmp);
+        s->matriculationNumber = atoi(part[4]);
+        s->startdate = parseDate(part[5]);
+        s->enddate = parseDate(part[6]);
+
+        // FIXME adding the done students doesn't work
+        // addStudent(s);
 
         // don't free s here, we will need it for as long as the process runs!
     }
-
+    fclose(stream);
     free(line);
-
     return 0;
 }
 
