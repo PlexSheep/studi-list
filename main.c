@@ -203,17 +203,21 @@ int recursiveDestroy(student *del){
 }
 
 void printAllStudents(){
-    student *inode = head;
-    if(studentListLength > 0 && inode != NULL){
+    student *s = head;
+    if(studentListLength > 0 && s != NULL){
         for (int i = 0; i < studentListLength; i++){
-            printf("Name: %s", inode -> name);
-            printf("Surname: %s", inode -> surname);
-            printf("Age: %d\n", inode -> age);
-            printf("Mnumber: %d\n", inode -> matriculationNumber);
-            printf("Bithdate: %d.", inode -> birthday.day);
-            printf("%d.", inode -> birthday.month);
-            printf("%d\n", inode -> birthday.year);
-            inode = inode -> next;
+            printf("Name: %s\n", s -> name);
+            printf("Surname: %s\n", s -> surname);
+            printf("Age: %d\n", s -> age);
+            printf("Mnumber: %d\n", s -> matriculationNumber);
+            printf("Bithdate: %d.%d.%d\n", s -> birthday.day, s -> birthday.month, s -> birthday.year);
+            printf("Startdate: %d.%d.%d\n", s -> startdate.day, s -> startdate.month, s -> startdate.year);
+            printf("Enddate: %d.%d.%d\n\n", s -> enddate.day, s -> enddate.month, s -> enddate.year);
+            if(s->next != NULL)
+                s = s -> next;
+            else{
+                printf("This students next is NULL!!!!\n");
+            }
         }
     }
     /*
@@ -254,8 +258,7 @@ int readCSVIntoMemory(){
         printf("Could not get memory!\n");
         exit(EXIT_FAILURE);
     }
-    while (fgets(line, 1024, stream))
-    {
+    while (fgets(line, 1024, stream)){
         char* removedQuotesString;
         char* part[7];   // TODO check if this is enough if names are fully filled.
         part[0] = strtok(line, ",");    // age
@@ -301,18 +304,18 @@ int readCSVIntoMemory(){
 }
 
 void printStudent(int Martik){
-    student *inode = head;
+    student *s = head;
     int fund=0;
-    if(studentListLength > 0 && inode != NULL){
+    if(studentListLength > 0 && s != NULL){
         for(int i=0;i<studentListLength;i++){
-            if(Martik == inode ->matriculationNumber){
-                printf("Name: %s", inode -> name);
-                printf("Surname: %s", inode -> surname);
-                printf("Age: %d\n", inode -> age);
-                printf("Mnumber: %d\n", inode -> matriculationNumber);
-                printf("Bithdate: %d.", inode -> birthday.day);
-                printf("%d.", inode -> birthday.month);
-                printf("%d\n", inode -> birthday.year);
+            if(Martik == s ->matriculationNumber){
+                printf("Name: %s\n", s -> name);
+                printf("Surname: %s\n", s -> surname);
+                printf("Age: %d\n", s -> age);
+                printf("Mnumber: %d\n", s -> matriculationNumber);
+                printf("Bithdate: %d.%d.%d\n", s -> birthday.day, s -> birthday.month, s -> birthday.year);
+                printf("Startdate: %d.%d.%d\n", s -> startdate.day, s -> startdate.month, s -> startdate.year);
+                printf("Enddate: %d.%d.%d\n\n", s -> enddate.day, s -> enddate.month, s -> enddate.year);
                 fund=1;
             }
         }
