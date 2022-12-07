@@ -243,10 +243,20 @@ struct date parseDate(char* cptr){
     return d;
 }
 
-char* removeQuotes(char* cptr){
-    char* cptrN = malloc(sizeof(cptr));    // TODO check if this works for full lenght char pointers!
-    strcpy(cptrN, cptr);
-    return cptrN;
+void removeQuotes(char* cptr){
+    int j = 0;
+    for (int i = 0; i < strlen(cptr); i ++) {
+        if (cptr[i] != '"' && cptr[i] != '\\') { 
+            cptr[j++] = cptr[i];
+        } else if (cptr[i+1] == '"' && cptr[i] == '\\') { 
+            cptr[j++] = '"';
+        } else if (cptr[i+1] != '"' && cptr[i] == '\\') { 
+            cptr[j++] = '\\';
+        }
+    }
+
+    //You missed the string termination ;)
+    if(j>0) cptr[j]=0;
 }
 
 int readCSVIntoMemory(){
@@ -258,9 +268,14 @@ int readCSVIntoMemory(){
         printf("Could not get memory!\n");
         exit(EXIT_FAILURE);
     }
+    char* part[7];   // TODO check if this is enough if names are fully filled.
+    student* s = malloc(sizeof(student));
+    if(s==NULL){
+        printf("Could not get memory!\n");
+        exit(EXIT_FAILURE);
+    }
+
     while (fgets(line, 1024, stream)){
-        char* removedQuotesString;
-        char* part[7];   // TODO check if this is enough if names are fully filled.
         part[0] = strtok(line, ",");    // age
         part[1] = strtok(NULL, ",");    // birthday
         part[2] = strtok(NULL, ",");    // name
@@ -268,20 +283,16 @@ int readCSVIntoMemory(){
         part[4] = strtok(NULL, ",");    // matriculationNumber
         part[5] = strtok(NULL, ",");    // startdate
         part[6] = strtok(NULL, ",");    // enddate
-        // Debug: print all segments
+                                        // Debug: print all segments
         printf("%s|%s|%s|%s|%s|%s|%s", part[0], part[1], part[2], part[3], part[4], part[5], part[6]);
 
-        char tmp[50] = "Buggy read from file\n";
-        student* s = malloc(sizeof(student));
         // TODO check if s is NULL
         s->age = atoi(part[0]);
         s->birthday = parseDate(part[1]);   // SIGSEV
-        removedQuotesString = removeQuotes(part[2]);
-        strcpy(s->name, removedQuotesString);
-        removedQuotesString = removeQuotes(part[3]);
-        strcpy(s->surname, removedQuotesString);
-        // strcpy(s->name, tmp);
-        // strcpy(s->surname, tmp);
+        removeQuotes(part[2]);
+        strcpy(s->name, part[2]);
+        removeQuotes(part[3]);
+        strcpy(s->surname, part[3]);
         s->matriculationNumber = atoi(part[4]);
         s->startdate = parseDate(part[5]);
         s->enddate = parseDate(part[6]);
@@ -325,6 +336,16 @@ void printStudent(int Martik){
     }
 }
 
+void debugTests(){
+    const char cptrE[] = "TESTSTRINGTESTSTRINGTESTTESTSTRINGSTRING";
+    printf("[DEBUG]Testing removeQuotes(char* cptr), output should be [%s].\n", cptrE);
+    char cptr[] = "\"TESTSTRING\"\"TESTSTRING\"\"TEST\"TESTSTRING\"STRING\"";
+    removeQuotes(cptr);
+    printf("[%s]\n", cptr);
+    if(!strcmp(cptrE, cptr)) printf("SUCCESS!\n");
+    else printf("FAILURE!\n");
+}
+
 int main(){
     int ende =0;
     int wahl;
@@ -344,6 +365,7 @@ int main(){
         printf("(4) Alle Studenten alphabetisch ausgeben\n");
         printf("(5) Studenten loeschen\n");
         printf("(6) Programm beenden\n");
+        printf("(7) Debug Testing\n");
         char tmpnum[50];
         fgets(tmpnum, 50, stdin);
         wahl = atoi(tmpnum);
@@ -376,6 +398,10 @@ int main(){
             case 6:
                 recursiveDestroy(head);
                 ende=1;
+                break;
+            case 7:
+                printf("\e[1;1H\e[2J");
+                debugTests();
                 break;
             default:
                 printf("Bitte einen gueltigen Wert eingeben\n");
