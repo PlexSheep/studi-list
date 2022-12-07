@@ -194,7 +194,8 @@ void printAllStudents(){
             printf("Mnumber: %d\n", s -> matriculationNumber);
             printf("Bithdate: %d.%d.%d\n", s -> birthday.day, s -> birthday.month, s -> birthday.year);
             printf("Startdate: %d.%d.%d\n", s -> startdate.day, s -> startdate.month, s -> startdate.year);
-            printf("Enddate: %d.%d.%d\n\n", s -> enddate.day, s -> enddate.month, s -> enddate.year);
+            printf("Enddate: %d.%d.%d\n", s -> enddate.day, s -> enddate.month, s -> enddate.year);
+            printf("------------------------------------\n");
             if(s->next != NULL)
                 s = s -> next;
         }
@@ -206,7 +207,7 @@ void printAllStudents(){
     */
 }
 
-int readCSVIntoMemory(){
+int readCSV(){
     FILE* stream = fopen("student.csv", "r");
     if(stream==NULL){
         printf("Could not open student.csv!\n");
@@ -297,11 +298,16 @@ void debugTests(){
     // Your code goes here
 }
 
+int saveCSV(){
+
+    return 0;
+}
+
 int main(){
     int ende = 0;
     int wahl;
 
-    if(readCSVIntoMemory()){
+    if(readCSV()){
         // reading the file failed.
         printf("Fatal error while reading from students.csv, exiting...\n");
         exit(EXIT_FAILURE);
