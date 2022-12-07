@@ -34,6 +34,38 @@ typedef struct node {
 student* head = NULL;  // first node
 student* tail = NULL;  // last node
 
+struct date parseDate(char* cptr){
+    struct date d;
+    struct date* dptr = &d;
+    char* part[3];   // TODO check if this is enough if names are fully filled.
+
+    part[0] = strtok(cptr, ".");    // day
+    part[1] = strtok(NULL, ".");    // month
+    part[2] = strtok(NULL, ".");    // year
+
+    dptr->day = atoi(part[0]);
+    dptr->month = atoi(part[1]);
+    dptr->year = atoi(part[2]);
+
+    return d;
+}
+
+void removeQuotes(char* cptr){
+    int j = 0;
+    for (int i = 0; i < strlen(cptr); i ++) {
+        if (cptr[i] != '"' && cptr[i] != '\\') { 
+            cptr[j++] = cptr[i];
+        } else if (cptr[i+1] == '"' && cptr[i] == '\\') { 
+            cptr[j++] = '"';
+        } else if (cptr[i+1] != '"' && cptr[i] == '\\') { 
+            cptr[j++] = '\\';
+        }
+    }
+
+    //You missed the string termination ;)
+    if(j>0) cptr[j]=0;
+}
+
 student* inputStudent(){
     char tmpnum[50];
     student *s = (student*) malloc(sizeof(student));
@@ -55,17 +87,7 @@ student* inputStudent(){
     // FIXME produces segfault if user input is formatted wrongly
     printf("Geben sie ihr Geburtsdatum ein:\n");
     fgets(tmpnum, 50, stdin);
-    int date[3];
-    date[0] = atoi(strtok(tmpnum, "."));
-    for(int i = 1; i < 3; i++){
-        if(tmpnum[i] == ' '){
-            break;
-        }
-        date[i] = atoi(strtok(NULL, "."));
-    }   
-    s -> birthday.day = date[0];
-    s -> birthday.month = date[1];
-    s -> birthday.year = date[2];;
+    s->birthday = parseDate(tmpnum);
 
     printf("Geben sie ihren Vornamen ein:\n");
     fgets(s -> name, 50, stdin);
@@ -76,55 +98,14 @@ student* inputStudent(){
     // FIXME produces segfault if user input is formatted wrongly
     printf("Geben sie ihr vorraussichtliches Startdatum ein\n");
     fgets(tmpnum, 50, stdin);
-    
-    date[0] = atoi(strtok(tmpnum, "."));
-    for(int i = 1; i < 3; i++){
-        if(tmpnum[i] == ' '){
-            break;
-        }
-        date[i] = atoi(strtok(NULL, "."));
-    }   
-    s -> startdate.day = date[0];
-    s -> startdate.month = date[1];
-    s -> startdate.year = date[2];;
+    s->startdate = parseDate(tmpnum);
 
     // FIXME produces segfault if user input is formatted wrongly
     printf("Geben sie ihr vorraussichtliches Abschlussdatum ein\n");
     fgets(tmpnum, 50, stdin);
-    
-    date[0] = atoi(strtok(tmpnum, "."));
-    for(int i = 1; i < 3; i++){
-        if(tmpnum[i] == ' '){
-            break;
-        }
-        date[i] = atoi(strtok(NULL, "."));
-    }   
-    s -> enddate.day = date[0];
-    s -> enddate.month = date[1];
-    s -> enddate.year = date[2];;
+    s->enddate = parseDate(tmpnum);
 
     return s;
-}
-
-/*
-void addNode(node* n){
-    if(studentListLength == 0){
-        // no elements in list yet, create the first.
-        head = n;
-    }
-    else {
-        tail->next = n;
-        tail = n;
-    }
-    studentListLength++;
-}
-*/
-
-void delNode(node* n){
-    n->last->next = n->next;
-    // TODO does free() work for our structs?
-    free(n);
-    studentListLength--;
 }
 
 // Schreibe eine Funktion in der die Anzahl der gespeicherten Studenten zurueck gegeben werden soll.
@@ -227,42 +208,12 @@ void printAllStudents(){
     */
 }
 
-struct date parseDate(char* cptr){
-    struct date d;
-    struct date* dptr = &d;
-    char* part[3];   // TODO check if this is enough if names are fully filled.
-
-    part[0] = strtok(cptr, ".");    // day
-    part[1] = strtok(NULL, ".");    // month
-    part[2] = strtok(NULL, ".");    // year
-
-    dptr->day = atoi(part[0]);
-    dptr->month = atoi(part[1]);
-    dptr->year = atoi(part[2]);
-
-    return d;
-}
-
-void removeQuotes(char* cptr){
-    int j = 0;
-    for (int i = 0; i < strlen(cptr); i ++) {
-        if (cptr[i] != '"' && cptr[i] != '\\') { 
-            cptr[j++] = cptr[i];
-        } else if (cptr[i+1] == '"' && cptr[i] == '\\') { 
-            cptr[j++] = '"';
-        } else if (cptr[i+1] != '"' && cptr[i] == '\\') { 
-            cptr[j++] = '\\';
-        }
-    }
-
-    //You missed the string termination ;)
-    if(j>0) cptr[j]=0;
-}
-
 int readCSVIntoMemory(){
-
     FILE* stream = fopen("student.csv", "r");
-
+    if(stream==NULL){
+        printf("Could not open student.csv!\n");
+        exit(EXIT_FAILURE);
+    }
     char* line = malloc(sizeof(char)*1024);
     if(line==NULL){
         printf("Could not get memory!\n");
@@ -274,7 +225,6 @@ int readCSVIntoMemory(){
         printf("Could not get memory!\n");
         exit(EXIT_FAILURE);
     }
-
     while (fgets(line, 1024, stream)){
         part[0] = strtok(line, ",");    // age
         part[1] = strtok(NULL, ",");    // birthday
