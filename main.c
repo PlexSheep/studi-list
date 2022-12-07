@@ -70,8 +70,19 @@ void removeQuotes(char* cptr){
 }
 
 student* inputStudent(){
+    /*
+    ########################################################################
+    # input method for the students                                        #
+    # reads strings from stdin and retruns a student struct                #
+    ########################################################################
+    */
+
+    // tmpnum array to use fgets as as safe input function. Later converted to number formats
     char tmpnum[50];
+
+    // Create student struct and allocate memory
     student *s = (student*) malloc(sizeof(student));
+    
     if(s == NULL){
         printf("Could not allocate Memory for new student.");
         exit(EXIT_FAILURE);
@@ -116,6 +127,12 @@ int getStudentenListLength(){
     return studentListLength;
 }
 
+int addStudent(student* s){ 
+    /*
+    ########################################################################
+    # Method to add a student to the linked list                           #
+    ########################################################################
+    */
 void addStudent(student* s){ //FIXME Adresses in node wrong
                              // TODO check if given student is already in the arr
                              // (( FIXME this function is broken!!!!
@@ -126,43 +143,100 @@ void addStudent(student* s){ //FIXME Adresses in node wrong
         head -> last = NULL;
         head -> next = NULL;
         tail = s;
+        tail -> next = NULL;
+        studentListLength++;
+        return 0;
     }
     else {
-        tail -> next = s;
-        s -> last = tail;
+        student *inode = head;
+        if(s -> surname[0] < head -> surname[0]){
+            s -> next = head;
+            head = s -> next;
+        }
+        // FIXME is this a good idea? might cause trouble when looping to find stuff
+        // This seems like hacky and bad code.
+        
+        while (inode -> next != NULL && s -> surname[0] > inode -> next -> surname[0]) {
+            //printf("%c", s -> surname[0]);
+            inode = inode -> next;
+        } 
+
+        s -> next = inode -> next;
+        inode -> next = s;
+
+        if(inode == tail){
+            tail = s;
+        }
+        
+        studentListLength++;
+        return 0;
+    }
+}
+
+// Bogus Code
+/*
+        // FIXME is this a good idea? might cause trouble when looping to find stuff
+        // This seems like hacky and bad code.
+        student *inode = head;
+        while (inode -> next != NULL) {
+            printf("%c", s -> surname[0]);
+            if(s -> surname[0] > inode -> next -> surname[0] && s -> surname[0] < inode -> next -> next -> surname[0]){
+                student *tmpStud = inode -> next -> next; 
+                inode -> next = s;
+                s -> next = tmpStud;
+                return 0;
+            }
+            inode = inode -> next;
+        } 
+
+        // Case if stidentListLenght is equal to 1
+        head -> next = s;
         s -> next = NULL;
         tail = s;
+        studentListLength++;  
+        return 0;
     }
-    studentListLength++;
-}
+*/
 
 // Schreibe eine funktion deleteStudent(matrikelnummer), welche einen Studenten loescht.
 // TODO rewrite with nodes
 int deleteStudent(int mNum){
-    // TODO iterate nodes, delete node with mNum matching argument
-    // return 0 on success, 1 on fail
+    /*
+    ########################################################################
+    # Method to delete students in by matriculation number                 #
+    ########################################################################
+    */
     student *inode = head;
+
+    // If this case is true, it is either the last oronly element in the list and the method should terminate once it is freed
     if(inode == tail && inode -> matriculationNumber == mNum){
         free(head);
         head = NULL;
         studentListLength--;
         return 0;
     }
-    while(inode != tail){
-        if(inode -> next -> matriculationNumber == mNum){
-            free(inode -> next);
-            inode -> next = NULL;
-            inode -> next = inode -> next -> next;
-            studentListLength--;
-            return 0;
-        }
+
+    // If above condition is not met, below code walks through the list and checks for the matchning matriculation number.
+    // If match is found, code frees and NULL's the matche
+    while(inode -> next -> matriculationNumber == mNum && inode != NULL){
         inode = inode -> next;
     }
-    return 1;
+    free(inode -> next);
+    inode -> next = NULL;
+    inode -> next = inode -> next -> next;
+    studentListLength--;
+    return 0;
+    
 }
 
 int recursiveDestroy(student *del){
     /*
+    ########################################################################
+    # Method to free the memory allocated in heap for the students         # 
+    # on programm exit                                                     #
+    ########################################################################
+    */
+    // Only execute if head was not already deleted or empty to begin with to avoid use after free
        printf("%x\n", head);
        printf("%x\n", tail);
        printf("%x\n", head -> last);
@@ -185,6 +259,13 @@ int recursiveDestroy(student *del){
 }
 
 void printAllStudents(){
+    /*
+    ########################################################################
+    # Method to print all students                                         # 
+    ########################################################################
+    */
+    student *inode = head;
+    if(studentListLength > 0 && inode != NULL){
     student *s = head;
     if(studentListLength > 0 && s != NULL){
         for (int i = 0; i < studentListLength; i++){
@@ -316,6 +397,12 @@ int saveCSV(){
 }
 
 int main(){
+    /*
+    ########################################################################
+    # The main method takes care of the menu and menu                      #
+    # user input functionality                                             #
+    ########################################################################
+    */
     int wahl;
     char tmpnum[50];
     int ret = 0;
@@ -327,7 +414,7 @@ int main(){
     }
 
     do{
-        printf("\e[1;1H\e[2J");
+        printf("\e[1;1H\e[2J"); // This is the ANSI escape sequence to clear the terminal and set coursor to start position. Used for fancy TUI
         printf("Bitte Wahl treffen:\n");
         printf("(1) Neuen Studenten anlegen\n");
         printf("(2) Anzahl der gespeicherten Studenten abrufen\n");
