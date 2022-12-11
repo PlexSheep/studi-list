@@ -46,9 +46,17 @@ struct date parseDate(char* cptr){
     part[1] = strtok(NULL, ".");    // month
     part[2] = strtok(NULL, ".");    // year
 
-    dptr->day = atoi(part[0]);
-    dptr->month = atoi(part[1]);
-    dptr->year = atoi(part[2]);
+    // debug printf, remove later or comment
+    if(part[0]!=NULL&&part[1]!=NULL&&part[2]!=NULL){
+        dptr->day = atoi(part[0]);
+        dptr->month = atoi(part[1]);
+        dptr->year = atoi(part[2]);
+    }
+    else{
+        dptr->day=-1;
+        dptr->month=-1;
+        dptr->year=-1;
+    }
 
     return d;
 }
@@ -71,18 +79,18 @@ void removeQuotes(char* cptr){
 
 student* inputStudent(){
     /*
-    ########################################################################
-    # input method for the students                                        #
-    # reads strings from stdin and retruns a student struct                #
-    ########################################################################
-    */
+########################################################################
+# input method for the students                                        #
+# reads strings from stdin and retruns a student struct                #
+########################################################################
+*/
 
     // tmpnum array to use fgets as as safe input function. Later converted to number formats
     char tmpnum[50];
 
     // Create student struct and allocate memory
     student *s = (student*) malloc(sizeof(student));
-    
+
     if(s == NULL){
         printf("Could not allocate Memory for new student.");
         exit(EXIT_FAILURE);
@@ -99,6 +107,7 @@ student* inputStudent(){
 
     printf("Geben sie ihr Geburtsdatum ein:\n");
     fgets(tmpnum, 50, stdin);
+    // TODO check for invalid date (-1.-1.-1)
     s->birthday = parseDate(tmpnum);
 
     printf("Geben sie ihren Vornamen ein:\n");
@@ -113,10 +122,12 @@ student* inputStudent(){
 
     printf("Geben sie ihr vorraussichtliches Startdatum ein\n");
     fgets(tmpnum, 50, stdin);
+    // TODO check for invalid date (-1.-1.-1)
     s->startdate = parseDate(tmpnum);
 
     printf("Geben sie ihr vorraussichtliches Abschlussdatum ein\n");
     fgets(tmpnum, 50, stdin);
+    // TODO check for invalid date (-1.-1.-1)
     s->enddate = parseDate(tmpnum);
 
     return s;
@@ -129,10 +140,10 @@ int getStudentenListLength(){
 
 int addStudent(student* s){ 
     /*
-    ########################################################################
-    # Method to add a student to the linked list                           #
-    ########################################################################
-    */
+########################################################################
+# Method to add a student to the linked list                           #
+########################################################################
+*/
 
     if(studentListLength == 0){
         // no elements in list yet, create the first.
@@ -152,7 +163,7 @@ int addStudent(student* s){
         }
         // FIXME is this a good idea? might cause trouble when looping to find stuff
         // This seems like hacky and bad code.
-        
+
         while (inode -> next != NULL && s -> surname[0] > inode -> next -> surname[0]) {
             //printf("%c", s -> surname[0]);
             inode = inode -> next;
@@ -164,7 +175,7 @@ int addStudent(student* s){
         if(inode == tail){
             tail = s;
         }
-        
+
         studentListLength++;
         return 0;
     }
@@ -172,37 +183,37 @@ int addStudent(student* s){
 
 // Bogus Code
 /*
-        // FIXME is this a good idea? might cause trouble when looping to find stuff
-        // This seems like hacky and bad code.
-        student *inode = head;
-        while (inode -> next != NULL) {
-            printf("%c", s -> surname[0]);
-            if(s -> surname[0] > inode -> next -> surname[0] && s -> surname[0] < inode -> next -> next -> surname[0]){
-                student *tmpStud = inode -> next -> next; 
-                inode -> next = s;
-                s -> next = tmpStud;
-                return 0;
-            }
-            inode = inode -> next;
-        } 
+// FIXME is this a good idea? might cause trouble when looping to find stuff
+// This seems like hacky and bad code.
+student *inode = head;
+while (inode -> next != NULL) {
+printf("%c", s -> surname[0]);
+if(s -> surname[0] > inode -> next -> surname[0] && s -> surname[0] < inode -> next -> next -> surname[0]){
+student *tmpStud = inode -> next -> next; 
+inode -> next = s;
+s -> next = tmpStud;
+return 0;
+}
+inode = inode -> next;
+} 
 
-        // Case if stidentListLenght is equal to 1
-        head -> next = s;
-        s -> next = NULL;
-        tail = s;
-        studentListLength++;  
-        return 0;
-    }
+// Case if stidentListLenght is equal to 1
+head -> next = s;
+s -> next = NULL;
+tail = s;
+studentListLength++;  
+return 0;
+}
 */
 
 // Schreibe eine funktion deleteStudent(matrikelnummer), welche einen Studenten loescht.
 // TODO rewrite with nodes
 int deleteStudent(int mNum){
     /*
-    ########################################################################
-    # Method to delete students in by matriculation number                 #
-    ########################################################################
-    */
+########################################################################
+# Method to delete students in by matriculation number                 #
+########################################################################
+*/
     student *inode = head;
 
     // If this case is true, it is either the last oronly element in the list and the method should terminate once it is freed
@@ -223,16 +234,16 @@ int deleteStudent(int mNum){
     inode -> next = inode -> next -> next;
     studentListLength--;
     return 0;
-    
+
 }
 
 int recursiveDestroy(student *del){
     /*
-    ########################################################################
-    # Method to free the memory allocated in heap for the students         # 
-    # on programm exit                                                     #
-    ########################################################################
-    */
+########################################################################
+# Method to free the memory allocated in heap for the students         # 
+# on programm exit                                                     #
+########################################################################
+*/
     // Only execute if head was not already deleted or empty to begin with to avoid use after free
     if(del != NULL){
         if(del == tail){
@@ -313,13 +324,16 @@ int readCSV(){
         // printf("%s|%s|%s|%s|%s|%s|%s", part[0], part[1], part[2], part[3], part[4], part[5], part[6]);
 
         s->age = atoi(part[0]);
+        // TODO check for invalid date (-1.-1.-1)
         s->birthday = parseDate(part[1]);
         removeQuotes(part[2]);
         strcpy(s->name, part[2]);
         removeQuotes(part[3]);
         strcpy(s->surname, part[3]);
         s->matriculationNumber = atoi(part[4]);
+        // TODO check for invalid date (-1.-1.-1)
         s->startdate = parseDate(part[5]);
+        // TODO check for invalid date (-1.-1.-1)
         s->enddate = parseDate(part[6]);
 
         // printf("Name: %s\n", s -> name);
