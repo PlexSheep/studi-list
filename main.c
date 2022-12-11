@@ -310,7 +310,7 @@ int readCSV(){
         part[6] = strtok(NULL, ",");    // enddate
 
         // Debug: print all parts
-        printf("%s|%s|%s|%s|%s|%s|%s", part[0], part[1], part[2], part[3], part[4], part[5], part[6]);
+        // printf("%s|%s|%s|%s|%s|%s|%s", part[0], part[1], part[2], part[3], part[4], part[5], part[6]);
 
         s->age = atoi(part[0]);
         s->birthday = parseDate(part[1]);
