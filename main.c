@@ -111,6 +111,7 @@ student* inputStudent(){
 
     do{
         printf("Geben sie ihr Geburtsdatum ein:\n");
+        printf("TT.MM.YYYY\n");
         fgets(tmpnum, 50, stdin);
         // TODO check for invalid date (-1.-1.-1)
         s->birthday = parseDate(tmpnum);
@@ -129,6 +130,7 @@ student* inputStudent(){
 
     do{
         printf("Geben sie ihr vorraussichtliches Startdatum ein\n");
+        printf("TT.MM.YYYY\n");
         fgets(tmpnum, 50, stdin);
         s->startdate = parseDate(tmpnum);
     }
@@ -136,6 +138,7 @@ student* inputStudent(){
 
     do{
         printf("Geben sie ihr vorraussichtliches Abschlussdatum ein\n");
+        printf("TT.MM.YYYY\n");
         fgets(tmpnum, 50, stdin);
         s->enddate = parseDate(tmpnum);
     }
