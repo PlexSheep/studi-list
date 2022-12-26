@@ -1,4 +1,7 @@
 #include <stdio.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <errno.h>
 #include <stdlib.h>
 #include <string.h>
 #include "./interface.h"
@@ -303,62 +306,77 @@ void printAllStudents(){
     }
 }
 
+off_t fsize(const char *filename) {
+    struct stat st;
+
+    if (stat(filename, &st) == 0)
+        return st.st_size;
+
+    fprintf(stderr, "Cannot determine size of %s: %s\n", filename,
+            strerror(errno));
+
+    return -1;
+}
+
+
 int readCSV(){
-    FILE* stream = fopen("student.csv", "r");
-    if(stream==NULL){
-        printf("Could not open student.csv!\n");
-        return 2;
-    }
-    char* line = malloc(sizeof(char)*1024);
-    if(line==NULL){
-        printf("Could not get memory!\n");
-        return 1;
-    }
-    char* part[7];   // TODO check if this is enough if names are fully filled.
-    student* s;
-    while (fgets(line, 1024, stream)){
-        s = malloc(sizeof(student));
-            if(s==NULL){
-            printf("Could not get memory!\n");
-        return 1;
+    if(fsize("student.scv")>0){
+        FILE* stream = fopen("student.csv", "r");
+        if(stream==NULL){
+            printf("Could not open student.csv!\n");
+            return 2;
         }
-        part[0] = strtok(line, ",");    // age
-        part[1] = strtok(NULL, ",");    // birthday
-        part[2] = strtok(NULL, ",");    // name
-        part[3] = strtok(NULL, ",");    // surname
-        part[4] = strtok(NULL, ",");    // matriculationNumber
-        part[5] = strtok(NULL, ",");    // startdate
-        part[6] = strtok(NULL, ",");    // enddate
+        char* line = malloc(sizeof(char)*1024);
+        if(line==NULL){
+            printf("Could not get memory!\n");
+            return 1;
+        }
+        char* part[7];   // TODO check if this is enough if names are fully filled.
+        student* s;
+        while (fgets(line, 1024, stream)){
+            s = malloc(sizeof(student));
+            if(s==NULL){
+                printf("Could not get memory!\n");
+                return 1;
+            }
+            part[0] = strtok(line, ",");    // age
+            part[1] = strtok(NULL, ",");    // birthday
+            part[2] = strtok(NULL, ",");    // name
+            part[3] = strtok(NULL, ",");    // surname
+            part[4] = strtok(NULL, ",");    // matriculationNumber
+            part[5] = strtok(NULL, ",");    // startdate
+            part[6] = strtok(NULL, ",");    // enddate
 
-        // Debug: print all parts
-        // printf("%s|%s|%s|%s|%s|%s|%s", part[0], part[1], part[2], part[3], part[4], part[5], part[6]);
+            // Debug: print all parts
+            // printf("%s|%s|%s|%s|%s|%s|%s", part[0], part[1], part[2], part[3], part[4], part[5], part[6]);
 
-        s->age = atoi(part[0]);
-        // TODO check for invalid date (-1.-1.-1)
-        s->birthday = parseDate(part[1]);
-        removeQuotes(part[2]);
-        strcpy(s->name, part[2]);
-        removeQuotes(part[3]);
-        strcpy(s->surname, part[3]);
-        s->matriculationNumber = atoi(part[4]);
-        // TODO check for invalid date (-1.-1.-1)
-        s->startdate = parseDate(part[5]);
-        // TODO check for invalid date (-1.-1.-1)
-        s->enddate = parseDate(part[6]);
+            s->age = atoi(part[0]);
+            // TODO check for invalid date (-1.-1.-1)
+            s->birthday = parseDate(part[1]);
+            removeQuotes(part[2]);
+            strcpy(s->name, part[2]);
+            removeQuotes(part[3]);
+            strcpy(s->surname, part[3]);
+            s->matriculationNumber = atoi(part[4]);
+            // TODO check for invalid date (-1.-1.-1)
+            s->startdate = parseDate(part[5]);
+            // TODO check for invalid date (-1.-1.-1)
+            s->enddate = parseDate(part[6]);
 
-        // printf("Name: %s\n", s -> name);
-        // printf("Surname: %s\n", s -> surname);
-        // printf("Age: %d\n", s -> age);
-        // printf("Mnumber: %d\n", s -> matriculationNumber);
-        // printf("Bithdate: %d.%d.%d\n", s -> birthday.day, s -> birthday.month, s -> birthday.year);
-        // printf("Startdate: %d.%d.%d\n", s -> startdate.day, s -> startdate.month, s -> startdate.year);
-        // printf("Enddate: %d.%d.%d\n\n", s -> enddate.day, s -> enddate.month, s -> enddate.year);
-        // FIXME adding the done students doesn't work
-        addStudent(s);
+            // printf("Name: %s\n", s -> name);
+            // printf("Surname: %s\n", s -> surname);
+            // printf("Age: %d\n", s -> age);
+            // printf("Mnumber: %d\n", s -> matriculationNumber);
+            // printf("Bithdate: %d.%d.%d\n", s -> birthday.day, s -> birthday.month, s -> birthday.year);
+            // printf("Startdate: %d.%d.%d\n", s -> startdate.day, s -> startdate.month, s -> startdate.year);
+            // printf("Enddate: %d.%d.%d\n\n", s -> enddate.day, s -> enddate.month, s -> enddate.year);
+            // FIXME adding the done students doesn't work
+            addStudent(s);
+        }
+        fclose(stream);
+        free(line);
+        // don't free s here, we will need it for as long as the process runs!
     }
-    fclose(stream);
-    free(line);
-    // don't free s here, we will need it for as long as the process runs!
     return 0;
 }
 
