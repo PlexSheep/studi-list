@@ -185,31 +185,6 @@ int addStudent(student* s){
     }
 }
 
-// Bogus Code
-/*
-// FIXME is this a good idea? might cause trouble when looping to find stuff
-// This seems like hacky and bad code.
-student *inode = head;
-while (inode -> next != NULL) {
-printf("%c", s -> surname[0]);
-if(s -> surname[0] > inode -> next -> surname[0] && s -> surname[0] < inode -> next -> next -> surname[0]){
-student *tmpStud = inode -> next -> next; 
-inode -> next = s;
-s -> next = tmpStud;
-return 0;
-}
-inode = inode -> next;
-} 
-
-// Case if stidentListLenght is equal to 1
-head -> next = s;
-s -> next = NULL;
-tail = s;
-studentListLength++;  
-return 0;
-}
-*/
-
 // Schreibe eine funktion deleteStudent(matrikelnummer), welche einen Studenten loescht.
 // TODO rewrite with nodes
 int deleteStudent(int mNum){
