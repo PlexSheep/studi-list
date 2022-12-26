@@ -33,13 +33,11 @@ student* head = NULL;  // first node
 student* tail = NULL;  // last node
 
 struct date parseDate(char* cptr){
-    // TODO check if the given string is a proper date, maybe using scanf?
     // return NULL if bad
     struct date d;
     struct date* dptr = &d;
-    char* part[3];   // TODO check if this is enough if names are fully filled.
+    char* part[3];
 
-    // TODO FIXME SEGFAULT WITH WRONG INPUT!
     part[0] = strtok(cptr, ".");    // day
     part[1] = strtok(NULL, ".");    // month
     part[2] = strtok(NULL, ".");    // year
@@ -100,7 +98,6 @@ student* inputStudent(){
         exit(EXIT_FAILURE);
     }
 
-    // TODO add validations for user input.
     printf("Geben sie ihr Alter ein:\n");
     fgets(tmpnum, 50, stdin);
     s -> age = atoi(tmpnum);
@@ -113,7 +110,6 @@ student* inputStudent(){
         printf("Geben sie ihr Geburtsdatum ein:\n");
         printf("TT.MM.YYYY\n");
         fgets(tmpnum, 50, stdin);
-        // TODO check for invalid date (-1.-1.-1)
         s->birthday = parseDate(tmpnum);
     }
     while(checkDate(&s->birthday));
@@ -317,7 +313,7 @@ int readCSV(){
             printf("Could not get memory!\n");
             return 1;
         }
-        char* part[7];   // TODO check if this is enough if names are fully filled.
+        char* part[7];
         student* s;
         while (fgets(line, 1024, stream)){
             s = malloc(sizeof(student));
@@ -337,16 +333,13 @@ int readCSV(){
             // printf("%s|%s|%s|%s|%s|%s|%s", part[0], part[1], part[2], part[3], part[4], part[5], part[6]);
 
             s->age = atoi(part[0]);
-            // TODO check for invalid date (-1.-1.-1)
             s->birthday = parseDate(part[1]);
             removeQuotes(part[2]);
             strcpy(s->name, part[2]);
             removeQuotes(part[3]);
             strcpy(s->surname, part[3]);
             s->matriculationNumber = atoi(part[4]);
-            // TODO check for invalid date (-1.-1.-1)
             s->startdate = parseDate(part[5]);
-            // TODO check for invalid date (-1.-1.-1)
             s->enddate = parseDate(part[6]);
 
             // printf("Name: %s\n", s -> name);
