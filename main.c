@@ -216,23 +216,32 @@ int deleteStudent(int mNum){
 */
     student *inode = head;
 
-    // If this case is true, it is either the last oronly element in the list and the method should terminate once it is freed
-    if(inode == tail && inode -> matriculationNumber == mNum){
-        free(head);
-        head = NULL;
+    // If this case is true, it is either the last or only element in the list and the method should terminate once it is freed
+    if(inode -> matriculationNumber == mNum){
+        student *oldHead = head;
+        head = head -> next;
+        free(oldHead);
         studentListLength--;
         return 0;
     }
 
     // If above condition is not met, below code walks through the list and checks for the matchning matriculation number.
     // If match is found, code frees and NULL's the matche
-    while(inode -> next -> matriculationNumber == mNum && inode != NULL){
+    int foundCounter = 0;
+    while(inode -> next -> matriculationNumber != mNum && inode != NULL){
         inode = inode -> next;
+        foundCounter++;
+        if(foundCounter >= studentListLength){
+            printf("Student nicht gefunden");
+            return 1;
+        }
     }
-    free(inode -> next);
-    inode -> next = NULL;
+    student *oldNext = inode -> next;
     inode -> next = inode -> next -> next;
+    free(oldNext);
+    oldNext = NULL;
     studentListLength--;
+    printf("");
     return 0;
 
 }
@@ -306,12 +315,12 @@ int readCSV(){
     }
     char* part[7];   // TODO check if this is enough if names are fully filled.
     student* s;
-    if(s==NULL){
-        printf("Could not get memory!\n");
-        return 1;
-    }
     while (fgets(line, 1024, stream)){
         s = malloc(sizeof(student));
+            if(s==NULL){
+            printf("Could not get memory!\n");
+        return 1;
+        }
         part[0] = strtok(line, ",");    // age
         part[1] = strtok(NULL, ",");    // birthday
         part[2] = strtok(NULL, ",");    // name
@@ -455,9 +464,10 @@ int main(){
                 break;
             case 5:
                 printf("\e[1;1H\e[2J");
-                printf("Matrikulationsnummer eingeben");
+                printf("Matrikulationsnummer eingeben: ");
                 fgets(tmpnum, 50, stdin);
-                deleteStudent(atoi(tmpnum));
+                if(tmpnum[0] != ' '){deleteStudent(atoi(tmpnum));}
+                else {printf("Falsche Eingabe");}      
                 break;
             case 6:
                 ret = saveCSV();
