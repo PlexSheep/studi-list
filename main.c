@@ -29,12 +29,6 @@ typedef struct student {
 // make a global var to store all of our students. This is a pointer because we want to use malloc()
 int studentListLength = 0;
 
-typedef struct node {
-    student* student;
-    struct node* next;
-    struct node* last;
-}node;
-
 student* head = NULL;  // first node
 student* tail = NULL;  // last node
 
@@ -163,7 +157,9 @@ int addStudent(student* s){
         student *inode = head;
         if(s -> surname[0] < head -> surname[0]){
             s -> next = head;
-            head = s -> next;
+            head = s;
+            studentListLength++;
+            return 0;
         }
         // FIXME is this a good idea? might cause trouble when looping to find stuff
         // This seems like hacky and bad code.
@@ -320,7 +316,7 @@ off_t fsize(const char *filename) {
 
 
 int readCSV(){
-    if(fsize("student.scv")>0){
+    if(fsize("student.csv")>0){
         FILE* stream = fopen("student.csv", "r");
         if(stream==NULL){
             printf("Could not open student.csv!\n");
