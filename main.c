@@ -349,7 +349,6 @@ int readCSV(){
             // printf("Bithdate: %d.%d.%d\n", s -> birthday.day, s -> birthday.month, s -> birthday.year);
             // printf("Startdate: %d.%d.%d\n", s -> startdate.day, s -> startdate.month, s -> startdate.year);
             // printf("Enddate: %d.%d.%d\n\n", s -> enddate.day, s -> enddate.month, s -> enddate.year);
-            // FIXME adding the done students doesn't work
             addStudent(s);
         }
         fclose(stream);
@@ -490,7 +489,6 @@ int main(){
                 printf("Bitte einen gueltigen Wert eingeben\n");
                 break;
         }
-        // FIXME it would be good practice to use the same input function for all inputs
         getc(stdin);
     }while(1);
 }
