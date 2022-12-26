@@ -59,6 +59,12 @@ struct date parseDate(char* cptr){
     return d;
 }
 
+int checkDate(struct date *d){
+    if(d->day != -1 && d->month != -1 && d->year != -1)
+        return 0;
+    else return 1;
+}
+
 void removeQuotes(char* cptr){
     int j = 0;
     for (int i = 0; i < strlen(cptr); i ++) {
@@ -103,10 +109,13 @@ student* inputStudent(){
     fgets(tmpnum, 50, stdin);
     s -> matriculationNumber = atoi(tmpnum);
 
-    printf("Geben sie ihr Geburtsdatum ein:\n");
-    fgets(tmpnum, 50, stdin);
-    // TODO check for invalid date (-1.-1.-1)
-    s->birthday = parseDate(tmpnum);
+    do{
+        printf("Geben sie ihr Geburtsdatum ein:\n");
+        fgets(tmpnum, 50, stdin);
+        // TODO check for invalid date (-1.-1.-1)
+        s->birthday = parseDate(tmpnum);
+    }
+    while(checkDate(&s->birthday));
 
     printf("Geben sie ihren Vornamen ein:\n");
     fgets(s -> name, 50, stdin);
@@ -118,15 +127,19 @@ student* inputStudent(){
     // FIXME \n is stored here aswell, which fucks everything up
     s->surname[strcspn(s->surname, "\n")] = 0;
 
-    printf("Geben sie ihr vorraussichtliches Startdatum ein\n");
-    fgets(tmpnum, 50, stdin);
-    // TODO check for invalid date (-1.-1.-1)
-    s->startdate = parseDate(tmpnum);
+    do{
+        printf("Geben sie ihr vorraussichtliches Startdatum ein\n");
+        fgets(tmpnum, 50, stdin);
+        s->startdate = parseDate(tmpnum);
+    }
+    while(checkDate(&s->startdate));
 
-    printf("Geben sie ihr vorraussichtliches Abschlussdatum ein\n");
-    fgets(tmpnum, 50, stdin);
-    // TODO check for invalid date (-1.-1.-1)
-    s->enddate = parseDate(tmpnum);
+    do{
+        printf("Geben sie ihr vorraussichtliches Abschlussdatum ein\n");
+        fgets(tmpnum, 50, stdin);
+        s->enddate = parseDate(tmpnum);
+    }
+    while(checkDate(&s->startdate));
 
     return s;
 }
