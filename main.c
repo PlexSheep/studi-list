@@ -182,7 +182,6 @@ int addStudent(student* s){
 }
 
 // Schreibe eine funktion deleteStudent(matrikelnummer), welche einen Studenten loescht.
-// TODO rewrite with nodes
 int deleteStudent(int mNum){
     /*
 ########################################################################
