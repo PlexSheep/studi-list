@@ -26,9 +26,9 @@ Das Programm soll eine Liste von Studenten verarbeiten
 
 - [X] Schreibe eine Funktion menue, ueber die die Verschienen funktionen aufgerufen werden sollen.
 
-- Schreibe eine funktion deleteStudent(matrikelnummer), welche einen Studenten loescht.
+- [X] Schreibe eine funktion deleteStudent(matrikelnummer), welche einen Studenten loescht.
 
-- Schreibe eine Funktion save die Alle gespeicherten Studenten in eine Datei speichert. Diese Funktion soll beim beenden des Programms automatisch aufgerufen werden und soll somit nicht im menue auftauchen
+- [X] Schreibe eine Funktion save die Alle gespeicherten Studenten in eine Datei speichert. Diese Funktion soll beim beenden des Programms automatisch aufgerufen werden und soll somit nicht im menue auftauchen
 
 - [X] Schreibe eine Funktion read die eine Datei ausliest und alle Studenten daraus ins Programm laed. Diese Funktion soll beim start des Programms automatisch aufgerufen werden und soll somit nicht im menue auftauchen
 
