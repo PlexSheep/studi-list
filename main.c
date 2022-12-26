@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "./interface.h"
 
 struct date {
     short day;
@@ -375,7 +376,9 @@ void printStudent(int Martik){
                 printf("Startdate: %d.%d.%d\n", s -> startdate.day, s -> startdate.month, s -> startdate.year);
                 printf("Enddate: %d.%d.%d\n\n", s -> enddate.day, s -> enddate.month, s -> enddate.year);
                 fund=1;
+                break;
             }
+            s = s-> next;
         }
         if(fund==0){
             printf("Unter dieser Martikulartionsnummer ist kein Student gespeichert.");
@@ -420,6 +423,8 @@ int main(){
 # user input functionality                                             #
 ########################################################################
 */
+    drawInterface();
+    getc(stdin);
     int wahl;
     char tmpnum[50];
     int ret = 0;
